@@ -1,0 +1,11 @@
+Usage: replace.exe <inputFile> <outputFile> <searchString> <replacementString>
+
+The program replaces all occurrences of<search String>with<replacement String> in the text file<input File>and saves the result to<outputFile>.
+
+Operating modes :
+1. With the parameters : pass the file names, the desired string and the string to replace.
+2. Without parameters : enter the desired string, the string to replace and the text via stdin.
+
+Mistakes :
+ - If the files do not open, the program outputs ERROR
+ - If the input via stdin is interrupted, the program outputs ERROR and ends.
