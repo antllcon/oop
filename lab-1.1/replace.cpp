@@ -46,7 +46,7 @@ std::string ReplaceString(const std::string& subject,
 
 	while (pos < subject.length())
 	{
-		size_t foundPos = subject.find(searchString, pos);
+		std::size_t foundPos = subject.find(searchString, pos);
 		if (foundPos == std::string::npos)
 		{
 			result.append(subject, pos);
