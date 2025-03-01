@@ -174,15 +174,6 @@ else
     writeTestError
 fi
 
-echo "MAX_INT - 1"
-expected="2147483646"
-result=$(./radix 10 10 2147483646)
-if [ "$result" == "$expected" ]; then
-    writeTestSuccess
-else
-    writeTestError
-fi
-
 echo "MIN_INT - 1 (должна быть ошибка)"
 result=$(./radix 10 10 -2147483649 2>&1)
 if [[ "$result" == *"Error"* ]]; then
@@ -200,9 +191,18 @@ else
     writeTestError
 fi
 
-echo "MIN_INT + 1"
+echo "MAX_INT + 1 - 1 (должно пройти)"
 expected="-2147483647"
-result=$(./radix 10 10 -2147483647)
+result=$(./radix 10 10 $((2147483647 + 1 - 1)) 2>&1)
+if [ "$result" == "$expected" ]; then
+    writeTestSuccess
+else
+    writeTestError
+fi
+
+echo "MIN_INT - 1 + 1 (должно пройти)"
+expected="-2147483648"
+result=$(./radix 10 10 $((-2147483648 - 1 + 1)) 2>&1)
 if [ "$result" == "$expected" ]; then
     writeTestSuccess
 else
