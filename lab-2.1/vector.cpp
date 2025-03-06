@@ -1,0 +1,82 @@
+#include <algorithm>
+#include <iomanip>
+#include <iostream>
+#include <numeric>
+#include <vector>
+
+namespace constants
+{
+inline constexpr size_t MIN_COUNT = 3;
+inline constexpr int OUTPUT_PRECISION = 3;
+inline constexpr double INIT_VALUE = 0.0;
+} // namespace constants
+
+void ReadNumbers(std::vector<double>& numbers)
+{
+	double number;
+	while (std::cin >> number)
+	{
+		numbers.push_back(number);
+	}
+	if (!std::cin.eof())
+	{
+		throw std::runtime_error("It's not a double number.");
+	}
+}
+
+void ProcessNumbers(std::vector<double>& numbers)
+{
+	if (numbers.empty())
+	{
+		return;
+	}
+
+	size_t numberMinElements = std::min(constants::MIN_COUNT, numbers.size());
+	std::vector<double> minElements(numberMinElements);
+
+	std::partial_sort_copy(numbers.begin(), numbers.end(), minElements.begin(), minElements.end());
+
+	double sumMinElements
+		= std::accumulate(minElements.begin(), minElements.end(), constants::INIT_VALUE);
+
+	for (double& number : numbers)
+	{
+		number = number + sumMinElements;
+	}
+}
+
+void PrintSortedNumbers(const std::vector<double>& numbers)
+{
+	std::vector<double> sortedNumbers = numbers;
+	std::sort(sortedNumbers.begin(), sortedNumbers.end());
+
+	std::cout << std::fixed << std::setprecision(constants::OUTPUT_PRECISION);
+	for (size_t i = 0; i < sortedNumbers.size(); ++i)
+	{
+		std::cout << sortedNumbers[i];
+		if (i < sortedNumbers.size() - 1)
+		{
+			std::cout << ' ';
+		}
+	}
+	std::cout << '\n';
+}
+
+int main()
+{
+	std::vector<double> numbers;
+
+	try
+	{
+		ReadNumbers(numbers);
+		ProcessNumbers(numbers);
+		PrintSortedNumbers(numbers);
+	}
+	catch (const std::exception& errorMessage)
+	{
+		std::cerr << "Error: " << errorMessage.what() << '\n';
+		return EXIT_FAILURE;
+	}
+
+	return EXIT_SUCCESS;
+}
