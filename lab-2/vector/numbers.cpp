@@ -1,8 +1,4 @@
-#include <algorithm>
-#include <iomanip>
-#include <iostream>
-#include <numeric>
-#include <vector>
+#include "numbers.h"
 
 namespace constants
 {
@@ -60,23 +56,4 @@ void PrintSortedNumbers(const std::vector<double>& numbers)
 		}
 	}
 	std::cout << '\n';
-}
-
-int main()
-{
-	std::vector<double> numbers;
-
-	try
-	{
-		ReadNumbers(numbers);
-		ProcessNumbers(numbers);
-		PrintSortedNumbers(numbers);
-	}
-	catch (const std::exception& errorMessage)
-	{
-		std::cerr << "Error: " << errorMessage.what() << '\n';
-		return EXIT_FAILURE;
-	}
-
-	return EXIT_SUCCESS;
 }
