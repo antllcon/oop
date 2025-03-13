@@ -4,7 +4,9 @@ GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-program_name="vector"
+cd ../../../build/program
+
+program_name="start"
 
 writeTestSuccess() {
   echo -e "${GREEN}Test passed${NC}"
@@ -13,14 +15,6 @@ writeTestSuccess() {
 writeTestError() {
   echo -e "${RED}Test failed${NC}"
 }
-
-# Компиляция программы
-echo "Компиляция программы..."
-g++ -o $program_name $program_name.cpp
-if [ $? -ne 0 ]; then
-  echo -e "${RED}Ошибка компиляции${NC}"
-  exit 1
-fi
 
 # Функция для запуска программы и проверки вывода
 runTest() {
