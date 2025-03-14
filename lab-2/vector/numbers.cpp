@@ -45,13 +45,16 @@ void PrintSortedNumbers(const std::vector<double>& numbers)
 	std::sort(sortedNumbers.begin(), sortedNumbers.end());
 
 	std::cout << std::fixed << std::setprecision(constants::OUTPUT_PRECISION);
-	for (size_t i = 0; i < sortedNumbers.size(); ++i)
+
+	bool first = true;
+	for (const double& number : sortedNumbers)
 	{
-		std::cout << sortedNumbers[i];
-		if (i < sortedNumbers.size() - 1)
+		if (!first)
 		{
 			std::cout << ' ';
 		}
+		std::cout << number;
+		first = false;
 	}
 	std::cout << '\n';
 }
