@@ -35,10 +35,8 @@ void ProcessNumbers(std::vector<double>& numbers)
 	double sumMinElements
 		= std::accumulate(minElements.begin(), minElements.end(), constants::INIT_VALUE);
 
-	for (double& number : numbers)
-	{
-		number = number + sumMinElements;
-	}
+	std::transform(numbers.begin(), numbers.end(), numbers.begin(),
+		[sumMinElements](double number) { return number + sumMinElements; });
 }
 
 void PrintSortedNumbers(const std::vector<double>& numbers)

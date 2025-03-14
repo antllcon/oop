@@ -2,66 +2,77 @@
 #include <gtest/gtest.h>
 #include <sstream>
 
-// Тесты для ReadNumbers
-TEST(ReadNumbersTest, ReadsNumbersCorrectly)
+TEST(ReadNumbersTest, ReadsCorrectlyNormal)
 {
 	std::vector<double> numbers;
-	std::istringstream input("1.5 2.3 3.7 4.1");
+	std::istringstream input("1.0 2.0 3.0");
+	std::cin.rdbuf(input.rdbuf());
 
-	std::streambuf* oldCin = std::cin.rdbuf(input.rdbuf());
-	ReadNumbers(numbers);
-	std::cin.rdbuf(oldCin);
-
-	std::vector<double> expected = { 1.5, 2.3, 3.7, 4.1 };
-	EXPECT_EQ(numbers, expected);
+	EXPECT_NO_THROW(ReadNumbers(numbers));
+	ASSERT_EQ(numbers.size(), 3);
+	EXPECT_EQ(numbers[0], 1.0);
+	EXPECT_EQ(numbers[1], 2.0);
+	EXPECT_EQ(numbers[2], 3.0);
 }
 
-TEST(ReadNumbersTest, ThrowsExceptionOnInvalidInput)
+TEST(ReadNumbersTest, ReadsInvalid)
 {
 	std::vector<double> numbers;
-	std::istringstream input("1.5 abc 3.7");
+	std::istringstream input("1.0 wrong 3.0");
+	std::cin.rdbuf(input.rdbuf());
 
-	std::streambuf* oldCin = std::cin.rdbuf(input.rdbuf());
 	EXPECT_THROW(ReadNumbers(numbers), std::runtime_error);
-	std::cin.rdbuf(oldCin);
 }
 
-// Тесты для ProcessNumbers
-TEST(ProcessNumbersTest, HandlesEmptyVector)
+TEST(ProcessNumbersTest, HandlesNormalVector)
 {
-	std::vector<double> numbers;
-	ProcessNumbers(numbers);
-	EXPECT_TRUE(numbers.empty());
-}
-
-TEST(ProcessNumbersTest, ProcessesNumbersCorrectly)
-{
-	std::vector<double> numbers = { 5.0, 3.0, 1.0, 4.0, 2.0 };
+	std::vector<double> numbers = { 5.0, 3.0, 1.0 };
+	std::vector<double> expected = { 14.0, 12.0, 10.0 };
 	ProcessNumbers(numbers);
 
-	std::vector<double> expected = { 11.0, 9.0, 7.0, 10.0, 8.0 };
+	ASSERT_EQ(numbers.size(), 3);
 	EXPECT_EQ(numbers, expected);
 }
 
 TEST(ProcessNumbersTest, HandlesSmallVector)
 {
 	std::vector<double> numbers = { 1.0, 2.0 };
+	std::vector<double> expected = { 4.0, 5.0 };
 	ProcessNumbers(numbers);
 
-	std::vector<double> expected = { 4.0, 5.0 };
+	ASSERT_EQ(numbers.size(), 2);
 	EXPECT_EQ(numbers, expected);
 }
 
-// Тесты для PrintSortedNumbers
-TEST(PrintSortedNumbersTest, PrintsSortedNumbersCorrectly)
+TEST(ProcessNumbersTest, HandlesEmptyVector)
 {
-	std::vector<double> numbers = { 5.0, 3.0, 1.0, 4.0, 2.0 };
+	std::vector<double> numbers;
+	ProcessNumbers(numbers);
+
+	ASSERT_EQ(numbers.size(), 0);
+	EXPECT_TRUE(numbers.empty());
+}
+
+TEST(PrintSortedNumbersTest, PrintsCorrectly)
+{
+	std::vector<double> numbers = { 3.0, 1.0, 2.0 };
 	std::ostringstream output;
+	std::streambuf* oldCoutBuffer = std::cout.rdbuf(output.rdbuf());
 
-	std::streambuf* oldCout = std::cout.rdbuf(output.rdbuf());
 	PrintSortedNumbers(numbers);
-	std::cout.rdbuf(oldCout);
+	std::cout.rdbuf(oldCoutBuffer);
 
-	std::string expected = "1.000 2.000 3.000 4.000 5.000\n";
-	EXPECT_EQ(output.str(), expected);
+	EXPECT_EQ(output.str(), "1.000 2.000 3.000\n");
+}
+
+TEST(PrintSortedNumbersTest, HandlesEmptyVector)
+{
+	std::vector<double> numbers;
+	std::ostringstream output;
+	std::streambuf* oldCoutBuffer = std::cout.rdbuf(output.rdbuf());
+
+	PrintSortedNumbers(numbers);
+	std::cout.rdbuf(oldCoutBuffer);
+
+	EXPECT_EQ(output.str(), "\n");
 }
