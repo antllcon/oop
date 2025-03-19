@@ -1,35 +1,17 @@
 #include "lib.h"
-#include <iostream>
-#include <map>
 
-using Dictionary = std::map<std::string, std::string>;
-
-int main()
+// Программа-словарь, осуществляющая перевод слов и словосочетаний,
+// поступающих со стандартного потока ввода, с английского языка на русский
+// с использованием заданного файла словаря и выводящая результат перевода в
+// стандартный поток вывода.
+int main(int argc, char* argv[])
 {
-
-	Dictionary dictionary;
-
-	dictionary.insert({ "cat", "кошка" });
-	dictionary["cat"] = "кошак";
-	dictionary["apple"] = "яблоко";
-	dictionary["banana"] = "банан";
-	dictionary["orange"] = "апельсин";
-
-	for (const auto& [eng, ru] : dictionary)
-	{
-		std::cout << eng << " " << ru << '\n';
-	}
-
-	std::string userMessage;
+	std::locale::global(std::locale("ru_RU.utf8"));
 	try
 	{
-		// getDictionary(filename);
-		do
-		{
-			/* code */
-		} while ((userMessage = getUserMessage()) != "...");
-
-		//
+		std::string fileName = GetFileName(argc, argv);
+		Dictionary dictionary = GetDictionary(fileName);
+		ProcessDialog(dictionary, fileName);
 	}
 	catch (const std::exception& errorMessage)
 	{
