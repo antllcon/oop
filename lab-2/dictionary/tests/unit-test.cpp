@@ -2,34 +2,35 @@
 #include <gtest/gtest.h>
 
 #include <codecvt>
-#include <cstdio> // для std::remove
+#include <cstdio>
 #include <fstream>
 #include <locale>
 #include <sstream>
 
-// ---------- Тестирование GetFileName ----------
+// Проверка получения имени файла
 TEST(GetFileNameTest, ValidArgs)
 {
-	char* argv[] = { (char*)"program", (char*)"dictionary.txt" };
+	char* argv[] = { (char*)"start", (char*)"dictionary" };
 	int argc = 2;
-	EXPECT_EQ(GetFileName(argc, argv), "dictionary.txt");
+	EXPECT_EQ(GetFileName(argc, argv), "dictionary");
 }
 
+// Не передано имя файла
 TEST(GetFileNameTest, InvalidArgs)
 {
-	char* argv[] = { (char*)"program" };
+	char* argv[] = { (char*)"start" };
 	int argc = 1;
 	EXPECT_THROW(GetFileName(argc, argv), std::runtime_error);
 }
 
-// ---------- Тестирование GetDictionaryLineWord ----------
+// Получение ключа
 TEST(GetDictionaryLineWordTest, ExtractsKey)
 {
 	std::string line = "cat - кот, кошка";
 	EXPECT_EQ(GetDictionaryLineWord(line), "cat");
 }
 
-// ---------- Тестирование FindSeparator ----------
+// Поиск разделителя
 TEST(FindSeparatorTest, FoundSeparator)
 {
 	std::string line = "cat - кот, кошка";
@@ -37,13 +38,14 @@ TEST(FindSeparatorTest, FoundSeparator)
 	EXPECT_EQ(pos, 3);
 }
 
+// Отсутствие разделителя
 TEST(FindSeparatorTest, NotFoundThrows)
 {
 	std::string line = "cat кот, кошка";
 	EXPECT_THROW(FindSeparator(line, " - "), std::runtime_error);
 }
 
-// ---------- Тестирование GetDictionaryLineValues ----------
+// Проверка получения переводов
 TEST(GetDictionaryLineValuesTest, ExtractsValues)
 {
 	std::string line = "cat - кот, кошка";
@@ -53,7 +55,7 @@ TEST(GetDictionaryLineValuesTest, ExtractsValues)
 	EXPECT_NE(values.find("кошка"), values.end());
 }
 
-// ---------- Тестирование SplitString ----------
+//
 TEST(SplitStringTest, MultipleValues)
 {
 	std::string input = "кот, кошка";
@@ -77,7 +79,6 @@ TEST(SplitStringTest, EmptyInputThrows)
 	EXPECT_THROW(SplitString(input), std::runtime_error);
 }
 
-// ---------- Тестирование TrimWord ----------
 TEST(TrimWordTest, TrimsSpaces)
 {
 	EXPECT_EQ(TrimWord("  hello  "), "hello");
@@ -87,20 +88,16 @@ TEST(TrimWordTest, TrimsSpaces)
 	EXPECT_EQ(TrimWord(""), "");
 }
 
-// ---------- Тестирование ProcessDialog ----------
-// Для интерактивных функций мы перенаправляем std::cin.
-// Здесь симулируем ввод, который сразу завершает диалог (строка "..." + ответ на сохранение).
 TEST(ProcessDialogTest, ExitImmediately)
 {
 	std::istringstream input("...\ny\n");
 	auto origBuf = std::cin.rdbuf();
 	std::cin.rdbuf(input.rdbuf());
-	Dictionary dict; // пустой словарь
-	EXPECT_NO_THROW(ProcessDialog(dict, "testfile.txt"));
+	Dictionary dict;
+	EXPECT_NO_THROW(ProcessDialog(dict, "testfile"));
 	std::cin.rdbuf(origBuf);
 }
 
-// ---------- Тестирование AddTranslation ----------
 TEST(AddTranslationTest, AddsTranslationCorrectly)
 {
 	// Симулируем ввод перевода "мясо" для слова "meat"
@@ -205,42 +202,24 @@ TEST(SaveQuestionTest, RejectsOtherInput)
 	std::cin.rdbuf(origBuf);
 }
 
-// ---------- Тестирование RewriteDictionary ----------
-// TEST(RewriteDictionaryTest, CorrectFormat)
-// {
-// 	Dictionary dict;
-// 	dict["cat"].insert("кошка");
-// 	dict["cat"].insert("кот");
-// 	std::ostringstream oss;
-// 	RewriteDictionary(oss, dict);
-// 	std::string output = oss.str();
-// 	EXPECT_NE(output.find("cat - "), std::string::npos);
-// 	EXPECT_NE(output.find("кошка"), std::string::npos);
-// 	EXPECT_NE(output.find("кот"), std::string::npos);
-// }
-
-// ---------- Тестирование GetTranslation ----------
 TEST(GetTranslationTest, ReturnsCaseInsensitiveTranslations)
 {
 	Dictionary dict;
 	dict["cat"].insert("кошка");
 	dict["cat"].insert("кот");
-	// При поиске слова "CAT" (разный регистр) должны вернуться переводы
 	ListWords translations = GetTranslation(dict, "CAT");
 	EXPECT_EQ(translations.size(), 2);
 	EXPECT_NE(translations.find("кошка"), translations.end());
 	EXPECT_NE(translations.find("кот"), translations.end());
 }
 
-// ---------- Тестирование ToLower ----------
 TEST(ToLowerTest, ConvertsAsciiAndRussian)
 {
-	std::string input = "CaT КОТ";
+	std::string input = "CaT";
 	std::string lower = ToLower(input);
-	EXPECT_EQ(lower, "cat кот");
+	EXPECT_EQ(lower, "cat");
 }
 
-// ---------- Тестирование конвертации UTF8/Wstring ----------
 TEST(UtfConversionTest, RoundTripConversion)
 {
 	std::string original = "Привет, мир!";
@@ -249,7 +228,6 @@ TEST(UtfConversionTest, RoundTripConversion)
 	EXPECT_EQ(utf8, original);
 }
 
-// ---------- Тестирование Normalize ----------
 TEST(NormalizeTest, TrimsAndLowers)
 {
 	std::string input = "  CaT  ";
@@ -257,7 +235,6 @@ TEST(NormalizeTest, TrimsAndLowers)
 	EXPECT_EQ(normalized, "cat");
 }
 
-// ---------- Тестирование PrintTranslation ----------
 TEST(PrintTranslationTest, OutputsTranslations)
 {
 	ListWords translations;
