@@ -1,5 +1,5 @@
-#ifndef LIB_H
-#define LIB_H
+#ifndef PRIME_H
+#define PRIME_H
 
 #include <iostream>
 #include <set>
@@ -16,14 +16,14 @@ void CheckArguments(int argumentCount, const std::string& argumentStr);
 /// @brief Генерация простых чисел решетом Эратосфена с предварительным просеиванием
 /// @param upperBound верхняя граница генерации
 /// @return Возвращает множество простых чисел
-SetPrimeNumbers GeneratePrimeNumbersSet(size_t upperBound);
+SetPrimeNumbers GeneratePrimeNumbersSet(int upperBound);
 
 /// @brief Вывод простых чисел
 /// @param primeNumbers объект хранящий простые числа
 void PrintPrimeNumbers(const SetPrimeNumbers& primeNumbers);
 
 // Инициалзация вектора чисел
-IsPrimeVectors InitVector(size_t upperBound);
+IsPrimeVectors InitVector(int upperBound);
 
 // Просеивание вектора с выявлением простых чисел
 void SieveVector(IsPrimeVectors& isPrimes, size_t upperBound);

@@ -1,4 +1,4 @@
-#include "lib.h"
+#include "prime.h"
 #include <algorithm>
 #include <cstdint>
 #include <vector>
@@ -16,15 +16,19 @@ void CheckArguments(int argumentCount, const std::string& argumentStr)
 	}
 }
 
-SetPrimeNumbers GeneratePrimeNumbersSet(size_t upperBound)
+SetPrimeNumbers GeneratePrimeNumbersSet(int upperBound)
 {
 	IsPrimeVectors isPrimes = InitVector(upperBound);
 	SieveVector(isPrimes, upperBound);
 	return CollectPrimes(isPrimes, upperBound);
 }
 
-IsPrimeVectors InitVector(size_t upperBound)
+IsPrimeVectors InitVector(int upperBound)
 {
+	if (upperBound < 0)
+	{
+		throw std::runtime_error("Отрицательный предел не может быть.");
+	}
 	IsPrimeVectors isPrimes(upperBound + 1, true);
 	isPrimes[0] = isPrimes[1] = false;
 	return isPrimes;

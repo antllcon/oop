@@ -1,4 +1,4 @@
-#include "../lib.h"
+#include "../prime.h"
 #include <gtest/gtest.h>
 
 // Правильное число аргументов и корректный формат строки
@@ -15,6 +15,20 @@ TEST(CheckArgumentsTest, InvalidArgumentCount)
 TEST(CheckArgumentsTest, NonDigitArgument)
 {
 	EXPECT_THROW(CheckArguments(2, "lmao"), std::runtime_error);
+}
+
+// Генерация простых чисел для upperBound = -1 (не должно быть простых чисел)
+TEST(GeneratePrimeNumbersSetTest, PrimesSignedOne)
+{
+	EXPECT_THROW(GeneratePrimeNumbersSet(-1), std::runtime_error);
+}
+
+// Генерация простых чисел для upperBound = 0 (не должно быть простых чисел)
+TEST(GeneratePrimeNumbersSetTest, PrimesZero)
+{
+	SetPrimeNumbers expected = {};
+	SetPrimeNumbers result = GeneratePrimeNumbersSet(0);
+	EXPECT_EQ(result, expected);
 }
 
 // Генерация простых чисел для upperBound = 1 (не должно быть простых чисел)
@@ -49,7 +63,7 @@ TEST(GeneratePrimeNumbersSetTest, PrimesTen)
 	EXPECT_EQ(result, expected);
 }
 
-// Проверка инициализации вектора: длина и начальные значения
+// Инициализация вектора
 TEST(InitVectorTest, SizeAndInitialValues)
 {
 	size_t upperBound = 10;
@@ -76,7 +90,7 @@ TEST(CollectPrimesTest, CollectFromVector)
 	EXPECT_EQ(result, expected);
 }
 
-// Проверка функции вывода: перенаправляем std::cout в строковый поток и сравниваем результат
+// Проверка функции вывода со сравнением резульатата
 TEST(PrintPrimeNumbersTest, OutputCapture)
 {
 	SetPrimeNumbers primes = { 2, 3, 5, 7 };
@@ -88,3 +102,12 @@ TEST(PrintPrimeNumbersTest, OutputCapture)
 	std::string expectedOutput = "2\n3\n5\n7\n";
 	EXPECT_EQ(buffer.str(), expectedOutput);
 }
+
+#ifdef NDEBUG
+TEST(GeneratePrimeNumbersSetTest, PrimesUpTo100Million)
+{
+	size_t upperBound = 100000000;
+	SetPrimeNumbers result = GeneratePrimeNumbersSet(upperBound);
+	EXPECT_EQ(result.size(), 5761455);
+}
+#endif
