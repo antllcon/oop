@@ -21,6 +21,9 @@ Dictionary GetDictionary(const std::string& fileName);
 /// @param fileName имя файла словаря (для сохранения измнений)
 void ProcessDialog(Dictionary& dictionary, const std::string& fileName);
 
+// Диалог для добавления слова
+void HandleTranslationWord(Dictionary& dictionary, std::string& word, bool& modified);
+
 // Вывод перевода в теорминал
 void PrintTranslation(ListWords& translation);
 
@@ -54,9 +57,8 @@ void SaveDictionary(const std::string& fileName, Dictionary& dictionary, bool mo
 // Получение строки от пользователя
 std::string GetMessage(std::istream&);
 
-// Добавление перевода слова; если пользователь вводит несколько вариантов через запятую,
-// они разбиваются и для каждого создаётся обратное соответствие.
-void AddTranslation(Dictionary& dictionary, std::string word, bool& modified);
+// Добавление перевода слова
+bool AddTranslation(Dictionary& dictionary, std::string& word, std::string& translationLine);
 
 // Удаление пробелов в начале и конце строки
 std::string TrimWord(const std::string& word);

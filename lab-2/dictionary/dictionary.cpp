@@ -1,6 +1,6 @@
-#ifndef LIB_H
-#define LIB_H
-#include "lib.h"
+#ifndef DICTIONARY_H
+#define DICTIONARY_H
+#include "dictionary.h"
 #include <algorithm>
 #include <codecvt>
 #include <fstream>
@@ -122,7 +122,7 @@ void ProcessDialog(Dictionary& dictionary, const std::string& fileName)
 		ListWords translation = GetTranslation(dictionary, userMessage);
 		if (translation.empty())
 		{
-			AddTranslation(dictionary, userMessage, modified);
+			HandleTranslationWord(dictionary, userMessage, modified);
 		}
 		else
 		{
@@ -131,7 +131,7 @@ void ProcessDialog(Dictionary& dictionary, const std::string& fileName)
 	}
 }
 
-void AddTranslation(Dictionary& dictionary, std::string word, bool& modified)
+void HandleTranslationWord(Dictionary& dictionary, std::string& word, bool& modified)
 {
 	std::cout << "Неизвестное слово \"" << word << "\". Введите перевод или пустую строку.\n";
 	std::string translationLine;
@@ -145,16 +145,23 @@ void AddTranslation(Dictionary& dictionary, std::string word, bool& modified)
 		return;
 	}
 
+	if (AddTranslation(dictionary, word, translationLine))
+	{
+		std::cout << "Слово \"" << word << "\" сохранено в словаре как \"" << translationLine
+				  << "\".\n";
+		modified = true;
+	}
+}
+
+bool AddTranslation(Dictionary& dictionary, std::string& word, std::string& translationLine)
+{
 	ListWords translations = SplitString(translationLine);
 	for (std::string translation : translations)
 	{
 		dictionary[word].insert(translationLine);
 		dictionary[translation].insert(word);
 	}
-
-	std::cout << "Слово \"" << word << "\" сохранено в словаре как \"" << translationLine
-			  << "\".\n";
-	modified = true;
+	return true;
 }
 
 std::string GetMessage(std::istream&)
