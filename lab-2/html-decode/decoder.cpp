@@ -1,13 +1,9 @@
 #include "decoder.h"
 #include <unordered_map>
 
-const std::unordered_map<std::string_view, char> HTML_ENTITIES = {
-	{ "&quot;", '\"' },
-	{ "&apos;", '\'' },
-	{ "&lt;", '<' },
-	{ "&gt;", '>' },
-	{ "&amp;", '&' },
-};
+const std::unordered_map<std::string_view, char> HTML_DECODE_MAP
+	= { { "&quot;", '"' }, { "&apos;", '\'' }, { "&lt;", '<' }, { "&gt;", '>' },
+		  { "&amp;", '&' } };
 
 void CopyStreamWithHtmlDecode(std::istream& input, std::ostream& output)
 {
@@ -19,27 +15,40 @@ void CopyStreamWithHtmlDecode(std::istream& input, std::ostream& output)
 	}
 }
 
-std::string HtmlDecode(const std::string& html)
+bool TryDecodeHtmlEntity(const std::string& text, size_t startPos,
+	size_t semicolonPos, std::string& decodeLine)
+{
+	std::string_view htmlEntity(&text[startPos], semicolonPos - startPos + 1);
+	auto htmlCh = HTML_DECODE_MAP.find(htmlEntity);
+	if (htmlCh != HTML_DECODE_MAP.end())
+	{
+		decodeLine += htmlCh->second;
+		return true;
+	}
+	return false;
+}
+
+std::string HtmlDecode(const std::string& text)
 {
 	std::string decodeLine;
-	for (size_t i = 0; i < html.size(); i++)
+	for (size_t i = 0; i < text.size(); i++)
 	{
-		size_t semicolonPos = html.find(';', i);
-		if (html[i] != '&' || semicolonPos == std::string::npos)
+		if (text[i] != '&')
 		{
-			decodeLine += html[i];
+			decodeLine += text[i];
 			continue;
 		}
 
-		std::string_view htmlEntity(&html[i], semicolonPos - i + 1);
-		auto htmlCh = HTML_ENTITIES.find(htmlEntity);
-		if (htmlCh == HTML_ENTITIES.end())
+		size_t semicolonPos = text.find(';', i);
+		if (semicolonPos == std::string::npos
+			|| !TryDecodeHtmlEntity(text, i, semicolonPos, decodeLine))
 		{
-			decodeLine += html[i];
-			continue;
+			decodeLine += text[i];
 		}
-		decodeLine += htmlCh->second;
-		i += semicolonPos - i;
+		else
+		{
+			i = semicolonPos;
+		}
 	}
 	return decodeLine;
 }
