@@ -98,3 +98,23 @@ TEST(HtmlDecodeTests, HandlesStringWithOnlyAmpersand)
 	EXPECT_EQ(HtmlDecode("&"), "&");
 	EXPECT_EQ(HtmlDecode("&&"), "&&");
 }
+
+TEST(HtmlDecodeTests, HandlesLongHtmlString)
+{
+	EXPECT_EQ(HtmlDecode("&&&&asus;;;;;;"), "&&&&asus;;;;;;");
+	EXPECT_EQ(HtmlDecode("&&&&quot;;;;;"), "&&&\";;;;");
+	EXPECT_EQ(HtmlDecode("&&apos;;"), "&\';");
+	EXPECT_EQ(HtmlDecode("&lt;;;;;;;"), "<;;;;;;");
+	EXPECT_EQ(HtmlDecode("&&&&&lt;"), "&&&&<");
+}
+
+TEST(HtmlDecodeTests, HandlesLongHtmlStringWithEntities)
+{
+	EXPECT_EQ(HtmlDecode("&lt;Tag&gt; &quot;Quoted&quot; &apos;Text&apos; &amp;&amp; "
+						 "&amp;sus;"),
+		"<Tag> \"Quoted\" \'Text\' && &sus;");
+}
+
+const std::unordered_map<std::string_view, char> HTML_DECODE_MAP
+	= { { "&quot;", '"' }, { "&apos;", '\'' }, { "&lt;", '<' }, { "&gt;", '>' },
+		  { "&amp;", '&' } };
