@@ -189,6 +189,7 @@ TEST(Car, CanSetGearIfSpeedInRange)
 	car.SetSpeed(60);
 	car.SetSpeed(150);
 	EXPECT_THROW(car.SetSpeed(151), std::runtime_error);
+	// car.SetSpeed(10);
 }
 
 // Нельзя включить передние передачи при движении назад

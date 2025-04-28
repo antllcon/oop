@@ -42,11 +42,13 @@ void Controller::HandleCommand()
 
 void Controller::Info() const
 {
+	m_output << "==============\n";
 	m_output << "Engine: " << (m_car.IsTurnedOn() ? "on" : "off") << std::endl;
 	m_output << "Direction: ";
 	PrintDirection();
 	m_output << "Speed: " << m_car.GetSpeed() << std::endl;
 	m_output << "Gear: " << static_cast<int>(m_car.GetGear()) << std::endl;
+	m_output << "=============\n";
 }
 
 void Controller::EngineOn() { m_car.TurnOnEngine(); }
@@ -61,8 +63,15 @@ void Controller::SetGear(const std::string& argument)
 
 void Controller::SetSpeed(const std::string& argument)
 {
-	int speed = std::stoi(argument);
-	m_car.SetSpeed(speed);
+	try
+	{
+		int speed = std::stoi(argument);
+		m_car.SetSpeed(speed);
+	}
+	catch (const std::exception& errorMessage)
+	{
+		std::cerr << errorMessage.what() << std::endl;
+	}
 }
 
 void Controller::PrintDirection() const

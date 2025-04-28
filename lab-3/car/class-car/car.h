@@ -55,6 +55,7 @@ private:
 			  { Gear::THIRD, { 30, 60 } }, { Gear::FOURTH, { 40, 90 } },
 			  { Gear::FIFTH, { 50, 150 } } };
 
+	void UpdateDirection(int speed, Gear gear);
 	void AssertIsReadyToStop() const;
 	void AssertIsValidGear(Gear gear) const;
 	void AssertIsGearValidRange(Gear gear) const;
@@ -62,7 +63,7 @@ private:
 	void AssertIsReadyToReverse() const;
 	void AssertIsReadyToForward() const;
 	void AssertIsPositiveSpeed(int speed) const;
-	void AssertIsVariableGear() const;
+	void AssertIsVariableGear(int speed) const;
 	void AssertIsSpeedValidRange(int speed) const;
 };
 

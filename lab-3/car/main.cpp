@@ -5,20 +5,19 @@
 
 int main()
 {
-	try
+	Car car;
+	Controller controller(car, std::cin, std::cout);
+	while (true)
 	{
-		Car car;
-		Controller controller(car, std::cin, std::cout);
-
-		while (true)
+		std::cout << "> ";
+		try
 		{
 			controller.HandleCommand();
 		}
-	}
-	catch (const std::exception& errorMessage)
-	{
-		std::cerr << errorMessage.what() << std::endl;
-		return EXIT_FAILURE;
+		catch (const std::exception& errorMessage)
+		{
+			std::cerr << errorMessage.what() << std::endl;
+		}
 	}
 
 	return EXIT_SUCCESS;

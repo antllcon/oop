@@ -27,53 +27,64 @@ void Car::TurnOffEngine()
 	m_isTurnedOn = false;
 }
 
+void Car::UpdateDirection(int speed, Gear gear)
+{
+	if (speed == 0)
+	{
+		m_direction = Direction::STANDING_STILL;
+		return;
+	}
+
+	if (gear == Gear::REVERSE)
+	{
+		m_direction = Direction::BACKWARD;
+		return;
+	}
+
+	m_direction = Direction::FORWARD;
+}
+
 void Car::SetGear(Gear gear)
 {
 	AssertIsValidGear(gear);
 	AssertIsGearValidRange(gear);
 	AssertIsEngineTurnedOn(gear);
+	AssertIsReadyToReverse();
 
-	if (gear == Gear::REVERSE)
+	if (gear == Gear::REVERSE && m_speed != 0)
 	{
-		AssertIsReadyToReverse();
-		m_direction = Direction::BACKWARD;
-	}
-	else
-	{
-		// AssertIsReadyToForward();
-		m_direction = Direction::FORWARD;
+		throw std::runtime_error("Нельзя делать полецейский разворот");
 	}
 
+	UpdateDirection(m_speed, gear);
 	m_gear = gear;
 }
 
 void Car::SetSpeed(int speed)
 {
-	AssertIsPositiveSpeed(speed);
-	AssertIsVariableGear();
 	AssertIsEngineTurnedOn(m_gear);
+	AssertIsPositiveSpeed(speed);
+	AssertIsVariableGear(speed);
 	AssertIsSpeedValidRange(speed);
 
-	if (speed > 0)
-	{
-		if (m_gear == Gear::REVERSE)
-		{
-			m_direction = Direction::BACKWARD;
-		}
-		else
-		{
-			m_direction = Direction::FORWARD;
-		}
-	}
-
+	UpdateDirection(speed, m_gear);
 	m_speed = speed;
 }
 
-void Car::AssertIsVariableGear() const
+void Car::AssertIsReadyToStop() const
 {
-	if (m_gear == Gear::NEUTRAL)
+	if (m_gear != Gear::NEUTRAL || m_speed != 0)
 	{
-		throw std::runtime_error("Нельзя разгоняться нейтральной скорости");
+		throw std::runtime_error("Нельзя выключить двигатель в движущейся машине");
+	}
+}
+
+void Car::AssertIsVariableGear(int speed) const
+{
+	if (m_gear == Gear::NEUTRAL && speed > m_speed)
+	{
+		throw std::runtime_error(
+			"Нельзя увеличивать скорость на нейтральной передаче");
 	}
 }
 
@@ -87,9 +98,10 @@ void Car::AssertIsPositiveSpeed(int speed) const
 
 void Car::AssertIsReadyToReverse() const
 {
-	if (m_isTurnedOn && m_speed != 0)
+	if (m_isTurnedOn && m_speed != 0 && m_gear == Gear::REVERSE)
 	{
-		throw std::runtime_error("Нельзя включить задний ход в движущейся машине");
+		throw std::runtime_error(
+			"Нельзя переключать передачу при движении задним ходом");
 	}
 }
 
@@ -98,14 +110,6 @@ void Car::AssertIsReadyToForward() const
 	if (m_gear == Gear::REVERSE)
 	{
 		throw std::runtime_error("Нельзя сменить направление если ты едешь назад");
-	}
-}
-
-void Car::AssertIsReadyToStop() const
-{
-	if (m_gear != Gear::NEUTRAL || m_speed != 0)
-	{
-		throw std::runtime_error("Нельзя выключить двигатель в движущейся машине");
 	}
 }
 
@@ -122,7 +126,7 @@ void Car::AssertIsGearValidRange(Gear gear) const
 	if (m_speed < m_gearSpeedRanges.at(gear).minSpeed
 		|| m_speed > m_gearSpeedRanges.at(gear).maxSpeed)
 	{
-		throw std::runtime_error("Нельзя применять передачу вне диапазона скорости");
+		throw std::runtime_error("Нельзя установить передачу вне диапазона скорости");
 	}
 }
 
