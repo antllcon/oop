@@ -24,6 +24,7 @@ private:
 	void AssertIsNameNoEmpty() const;
 	void AssertIsMoneyPositive() const;
 	void AssertIsTransferMoneyValid(const Money cash) const;
+	void AssertIsWalletSizeEnough(const Money cash) const;
 
 private:
 	std::string m_name;
