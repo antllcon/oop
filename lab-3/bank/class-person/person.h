@@ -3,6 +3,9 @@
 
 // TODO: сделать класс обработки исклчений
 
+class Person;
+using Persons = std::set<Person&>;
+
 class Person
 {
 public:
