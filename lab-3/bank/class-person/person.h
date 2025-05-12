@@ -1,11 +1,6 @@
 #include "../types.h"
 #include <string>
 
-// TODO: сделать класс обработки исклчений
-
-class Person;
-using Persons = std::set<Person&>;
-
 class Person
 {
 public:
@@ -15,6 +10,7 @@ public:
 	Person& operator=(Person&&) = default;
 	Person(const Person&) = delete;
 	Person& operator=(const Person&) = delete;
+	virtual ~Person() = default;
 
 	[[nodiscard]] const std::string& GetName() const;
 	[[nodiscard]] Money GetMoney() const;
@@ -24,12 +20,12 @@ public:
 	void TransferTo(Person& recipient, const Money cash);
 
 private:
-	void AssertIsNameNoEmpty() const;
+	void AssertIsNameValid(const std::string& name) const;
 	void AssertIsMoneyPositive() const;
 	void AssertIsTransferMoneyValid(const Money cash) const;
 	void AssertIsWalletSizeEnough(const Money cash) const;
 
 private:
-	std::string m_name;
+	const std::string m_name;
 	Money m_cash;
 };
