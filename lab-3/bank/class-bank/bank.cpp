@@ -1,60 +1,115 @@
 #include "bank.h"
-#include <random>
 
 Bank::Bank(Money cash)
 	: m_cash(cash)
-// : m_accounts()
 {
-	// AssertIsCashValid();
-	if (cash < 0)
-	{
-		throw std::runtime_error("Negative cash is not allowed");
-	}
+	AssertIsNonNegaiveMoney(cash);
 }
 
-void Bank::SendMoney(AccountId srcAccountId, AccountId dstAccountId, Money amount)
+Money Bank::GetCash() const
 {
-	if (amount < 0)
-	{
-		throw std::runtime_error("You cannot transfer a negative amount of money");
-	}
+	return m_cash;
+}
 
-	if (!srcAccountId || !dstAccountId)
-	{
-		throw std::runtime_error("The account does not exist");
-	}
-
-	if (srcAccountId.GetMoney() < amount)
-	{
-		throw std::runtime_error("Not enough money");
-	}
-
-	srcAccountId.PopMoney(amount);
-	dstAccountId.PushMoney(amount);
-};
+Money Bank::GetAccountBalance(AccountId id) const
+{
+	AssertIsAccountExist(id);
+	return m_accounts.at(id);
+}
 
 AccountId Bank::OpenAccount()
 {
-	static std::random_device rd;
-	static std::mt19937 gen(rd());
-	static std::uniform_int_distribution<AccountId> dist(1, 1'000'000'000);
-
-	return dist(gen);
+	auto id = m_nextAccountId++;
+	m_accounts[id] = 0;
+	return id;
 }
 
-Money Bank::CloseAccount(AccountId accountId)
+Money Bank::CloseAccount(const AccountId id)
 {
-	// Что-то типо возврата денег
+	auto balance = GetAccountBalance(id);
+	m_accounts.erase(m_accounts.find(id));
+	return balance;
 }
 
-// [[nodiscard]] Money Bank::GetCash() const { return m_cash; }
+void Bank::DepositMoney(AccountId id, Money amount)
+{
+	if (!TryDepositMoney(id, amount))
+	{
+		throw BankOperationError("Deposit operation failed");
+	}
 
-// Money GetAccountBalance(AccountId accountId) const
-// {
-// 	if (!accountId)
-// 	{
-// 		throw std::invalid_argument("The account does not exist");
-// 	}
+	m_accounts[id] += amount;
+	m_cash -= amount;
+}
 
-// 	return;
-// }
+bool Bank::TryDepositMoney(AccountId id, Money amount)
+{
+	AssertIsNonNegaiveMoney(amount);
+
+	if (m_cash < amount)
+	{
+		return false;
+	}
+
+	AssertIsAccountExist(id);
+	return true;
+}
+
+void Bank::WithdrawMoney(AccountId id, Money amount)
+{
+	if (!TryWithdrawMoney(id, amount))
+	{
+		throw BankOperationError("Withdraw operation failed");
+	}
+
+	m_accounts[id] -= amount;
+	m_cash += amount;
+}
+
+bool Bank::TryWithdrawMoney(AccountId id, Money amount)
+{
+	AssertIsNonNegaiveMoney(amount);
+	if (GetAccountBalance(id) < amount)
+	{
+		return false;
+	}
+}
+
+void Bank::SendMoney(AccountId srcId, AccountId dstId, Money amount)
+{
+	if (!TrySendMoney(srcId, dstId, amount))
+	{
+		throw BankOperationError("Couldn't transfer money");
+	}
+
+	m_accounts[srcId] -= amount;
+	m_accounts[dstId] += amount;
+}
+
+bool Bank::TrySendMoney(AccountId srcId, AccountId dstId, Money amount)
+{
+	AssertIsNonNegaiveMoney(amount);
+	AssertIsAccountExist(srcId);
+	AssertIsAccountExist(dstId);
+
+	if (GetAccountBalance(srcId) < amount)
+	{
+		return false;
+	}
+}
+
+void Bank::AssertIsAccountExist(AccountId id) const
+{
+	if (m_accounts.find(id) == m_accounts.end())
+	{
+		return throw BankOperationError("Account does not exist");
+	}
+}
+
+void Bank::AssertIsNonNegaiveMoney(Money money) const
+{
+	if (money < 0)
+	{
+		throw std::out_of_range("Negative amount is not allowed");
+	}
+}
