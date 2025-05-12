@@ -1,40 +1,37 @@
 #ifndef HOMER_H
 #define HOMER_H
 
-#include "../class-bank-user/bank-user.h"
 #include "../class-bank/bank.h"
-#include "../class-person/person.h"
+#include "../class-contact/contact-list.h"
+#include "../class-person-with-account/person-with-account.h"
 #include "../types.h"
 #include <set>
 
-class Homer : public Person
+class Homer : public PersonWithAccount
 {
 public:
-	Homer(Money cash, Person& marge, Person& berns, Person& lisa, Person& bart);
+	Homer(
+		const std::string& name, const Money cash, Bank& bank, ContactList& contact);
 
 	Homer(const Homer&) = delete;
 	Homer& operator=(const Homer&) = delete;
 
-	void Step(Bank& bank);
+	void Step();
 
 private:
-	void OpenMyAccount(Bank& bank);
-	void CloseMyAccount(Bank& bank);
+	void GiveMoneyToMarge();
+	void PayElectricity();
+	void GiveMoneyToKids();
 
-	void GiveMoneyToMarge(Bank& bank);
-	void PayElectricity(Bank& bank);
-	void GiveMoneyToKids(Bank& bank);
+	void AssertIsEnoughMoney(const Money money) const;
 
 private:
-	Person& m_marge;
-	Person& m_berns;
-	Person& m_lisa;
-	Person& m_bart;
+	ContactList& m_contact;
 
-	// TODO: сделать как-то лучше?
-	static constexpr Money amountToMarge = 100;
-	static constexpr Money amountToElectricity = 200;
-	static constexpr Money amountToKid = 20;
+	const Money toMarge = 100;
+	const Money toBerns = 200;
+	const Money toBart = 50;
+	const Money toLisa = 50;
 };
 
 #endif // HOMER_H

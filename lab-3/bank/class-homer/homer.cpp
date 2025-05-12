@@ -1,45 +1,59 @@
 #include "homer.h"
 
-// Что за this?
-Homer::Homer(Money cash, BankUser& marge, BankUser& berns, Person& lisa, Person& bart)
-	: Person("Homer", cash)
-	, m_bankUser(*this)
-	, m_marge(marge)
-	, m_berns(berns)
-	, m_lisa(lisa)
-	, m_bart(bart)
-
+Homer::Homer(
+	const std::string& name, const Money cash, Bank& bank, ContactList& contact)
+	: PersonWithAccount(name, cash, bank)
+	, m_contact(contact)
 {
 }
 
-void Homer::OpenMyAccount(Bank& bank)
+void Homer::Step()
 {
-	m_bankUser.OpenAccount(bank);
-}
-
-void Homer::CloseMyAccount(Bank& bank)
-{
-	m_bankUser.CloseAccount(bank);
-}
-
-void Homer::GiveMoneyToMarge(Bank& bank)
-{
-	bank.SendMoney(m_bankUser.GetAccountId(), m_marge.GetAccountId(), amountToMarge);
-}
-
-void Homer::PayElectricity(Bank& bank)
-{
-	bank.SendMoney(
-		m_bankUser.GetAccountId(), m_berns.GetAccountId(), amountToElectricity);
-}
-
-void Homer::GiveMoneyToKids(Bank& bank)
-{
-	if (!GetMoney())
+	try
 	{
-		m_bankUser.Withdraw(bank, amountToKid * m_kids.size());
+		GiveMoneyToMarge();
+		PayElectricity();
+		GiveMoneyToKids();
 	}
-
-	// Придумать как им переводить денег
-	bank.
+	catch (const std::exception& error)
+	{
+		std::cerr << error.what() << std::endl;
+		std::cout << "Homer skip this step" << std::endl;
+	}
 }
+
+void Homer::GiveMoneyToMarge()
+{
+	AssertIsEnoughMoney(toMarge);
+	auto& marge = m_contact.GetAccountPerson("Marge");
+	SendMoney(marge.GetAccountId(), toMarge);
+}
+
+void Homer::PayElectricity()
+{
+	AssertIsEnoughMoney(toBerns);
+	auto& berns = m_contact.GetAccountPerson("Berns");
+	SendMoney(berns.GetAccountId(), toBerns);
+}
+
+void Homer::GiveMoneyToKids()
+{
+	AssertIsEnoughMoney(toLisa);
+	auto& lisa = m_contact.GetPerson("Lisa");
+	TransferTo(lisa, toLisa);
+
+	AssertIsEnoughMoney(toBart);
+	auto& bart = m_contact.GetPerson("Bart");
+	TransferTo(bart, toBart);
+}
+
+void Homer::AssertIsEnoughMoney(const Money money) const
+{
+	if (GetMoney() < money)
+	{
+		throw std::runtime_error("Is there enough money for the transaction");
+	}
+}
+
+// Стоит ли делать обраоботку ошибок, если мы не сможем проверить работу класса
+// bank?
