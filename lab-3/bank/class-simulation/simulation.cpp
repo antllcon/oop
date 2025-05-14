@@ -47,7 +47,8 @@ void Simulation::RunSimulation()
 			}
 		}
 
-		DebugController();
+		// DebugController();
+		ShowBalances();
 	}
 	PrintResults();
 }
@@ -77,14 +78,14 @@ void Simulation::PrintResults() const
 				 "the form of cash.\n"
 			  << std::endl;
 
-	std::cout << "Status = " << std::endl;
+	std::cout << "Status = ";
 	if (sum + m_bank.GetDeposits() == m_simulationMoney)
 	{
-		std::cout << "[Yes]";
+		std::cout << "[Yes]" << std::endl;
 	}
 	else
 	{
-		std::cout << "[False]";
+		std::cout << "[False]" << std::endl;
 	}
 }
 
