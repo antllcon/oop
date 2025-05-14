@@ -55,7 +55,7 @@ void Simulation::RunSimulation()
 
 void Simulation::PrintResults() const
 {
-	std::cout << "\nResults:\n" << std::endl;
+	std::cout << "\nResults:" << std::endl;
 
 	Money sum = 0;
 	for (auto& actor : m_actors)
