@@ -18,8 +18,8 @@ Simulation::Simulation(const Money money, const int days)
 
 	m_actors.emplace_back(std::make_unique<Homer>("Homer", 0, m_bank, m_contacts));
 	m_actors.emplace_back(std::make_unique<Marge>("Marge", 0, m_bank, m_contacts));
-	m_actors.emplace_back(std::make_unique<Lisa>("Lisa ", 0, m_bank, m_contacts));
-	m_actors.emplace_back(std::make_unique<Bart>("Bart ", 0, m_bank, m_contacts));
+	m_actors.emplace_back(std::make_unique<Lisa>("Lisa ", 0, m_contacts));
+	m_actors.emplace_back(std::make_unique<Bart>("Bart ", 0, m_contacts));
 	m_actors.emplace_back(std::make_unique<Apu>("Apu", 0, m_bank, m_contacts));
 	m_actors.emplace_back(std::make_unique<Berns>("Berns", 0, m_bank, m_contacts));
 
@@ -130,7 +130,7 @@ void Simulation::ShowBalances() const
 
 	for (const auto& actor : m_actors)
 	{
-		std::cout << "| " << std::setw(10) << std::left << actor->GetName() << " | ";
+		std::cout << "| " << std::setw(8) << std::left << actor->GetName() << " | ";
 
 		if (const auto* personWithAccount
 			= dynamic_cast<const PersonWithAccount*>(actor.get()))

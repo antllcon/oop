@@ -18,7 +18,7 @@ void Apu::Step()
 
 void Apu::PayElectricity()
 {
-//	 AssertIsEnoughMoney(toBerns);
+	//	 AssertIsEnoughMoney(toBerns);
 	auto& berns = m_contacts.GetAccountPerson("Berns");
 	SendMoney(berns.GetAccountId(), toBerns);
 	std::cout << "Apu pay for electricity (Burns) " << toBerns << std::endl;
@@ -28,5 +28,5 @@ void Apu::DepositCash()
 {
 	// AssertIsEnoughMoney(toLisa);
 	Deposit(GetMoney());
-	std::cout << "Apu deposit money to bank account" << GetMoney() << std::endl;
+	std::cout << "Apu deposit money to bank account " << GetMoney() << std::endl;
 }

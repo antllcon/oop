@@ -1,7 +1,6 @@
 #include "marge.h"
 
-Marge::Marge(
-	const std::string& name, Money cash, Bank& bank, ContactList& contact)
+Marge::Marge(const std::string& name, Money cash, Bank& bank, ContactList& contact)
 	: PersonWithAccount(name, cash, bank)
 	, m_contacts(contact)
 {
@@ -18,5 +17,5 @@ void Marge::PayForProducts()
 	// AssertIsEnoughMoney(toApu);
 	auto& apu = m_contacts.GetAccountPerson("Apu");
 	SendMoney(apu.GetAccountId(), toApu);
-	std::cout << "Marge buys products from Apu" << toApu << std::endl;
+	std::cout << "Marge buys products from Apu " << toApu << std::endl;
 }

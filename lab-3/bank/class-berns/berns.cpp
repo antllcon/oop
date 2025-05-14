@@ -1,7 +1,6 @@
 #include "berns.h"
 
-Berns::Berns(
-	const std::string& name, Money cash, Bank& bank, ContactList& contact)
+Berns::Berns(const std::string& name, Money cash, Bank& bank, ContactList& contact)
 	: PersonWithAccount(name, cash, bank)
 	, m_contacts(contact)
 {
@@ -17,5 +16,5 @@ void Berns::PaySalary()
 {
 	auto& homer = m_contacts.GetAccountPerson("Homer");
 	SendMoney(homer.GetAccountId(), toEmployer);
-	std::cout << "Berns pay salary for employers" << toEmployer << std::endl;
+	std::cout << "Berns pay salary for employers " << toEmployer << std::endl;
 }
