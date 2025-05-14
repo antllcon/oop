@@ -4,14 +4,19 @@ void ContactList::Add(Person& person)
 {
 	const auto& name = person.GetName();
 	AssertIsContactNonExists(name);
-	m_registry[name] = std::ref(person);
-	;
+	// m_registry[name] = std::ref(person);
+	m_registry.emplace(name, std::ref(person));
 }
 
 Person& ContactList::GetPerson(const std::string& name) const
 {
 	AssertIsContactExists(name);
 	return m_registry.at(name).get();
+}
+
+const ContactMap& ContactList::GetAllContacts() const
+{
+	return m_registry;
 }
 
 PersonWithAccount& ContactList::GetAccountPerson(const std::string& name) const

@@ -41,6 +41,14 @@ void Person::TransferTo(Person& recipient, const Money cash)
 	recipient.ReciveCash(cash);
 }
 
+void Person::AssertIsEnoughMoney(const Money money) const
+{
+	if (GetMoney() < money)
+	{
+		throw std::runtime_error("Is there enough money for the transaction");
+	}
+}
+
 void Person::AssertIsNameValid(const std::string& name) const
 {
 	if (name.empty())

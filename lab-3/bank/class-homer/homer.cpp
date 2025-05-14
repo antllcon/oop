@@ -3,57 +3,45 @@
 Homer::Homer(
 	const std::string& name, const Money cash, Bank& bank, ContactList& contact)
 	: PersonWithAccount(name, cash, bank)
-	, m_contact(contact)
+	, m_contacts(contact)
 {
+	m_contacts.Add(*this);
 }
 
 void Homer::Step()
 {
-	try
-	{
-		GiveMoneyToMarge();
-		PayElectricity();
-		GiveMoneyToKids();
-	}
-	catch (const std::exception& error)
-	{
-		std::cerr << error.what() << std::endl;
-		std::cout << "Homer skip this step" << std::endl;
-	}
+	GiveMoneyToMarge();
+	PayElectricity();
+	GiveMoneyToKids();
 }
 
 void Homer::GiveMoneyToMarge()
 {
-	AssertIsEnoughMoney(toMarge);
-	auto& marge = m_contact.GetAccountPerson("Marge");
+	// AssertIsEnoughMoney(toMarge);
+	auto& marge = m_contacts.GetAccountPerson("Marge");
 	SendMoney(marge.GetAccountId(), toMarge);
+	std::cout << "Homer give money to Marge " << toMarge << std::endl;
 }
 
 void Homer::PayElectricity()
 {
-	AssertIsEnoughMoney(toBerns);
-	auto& berns = m_contact.GetAccountPerson("Berns");
+	// AssertIsEnoughMoney(toBerns);
+	auto& berns = m_contacts.GetAccountPerson("Berns");
 	SendMoney(berns.GetAccountId(), toBerns);
+	std::cout << "Homer pay for electricity (Burns) " << toBerns << std::endl;
 }
 
 void Homer::GiveMoneyToKids()
 {
-	AssertIsEnoughMoney(toLisa);
-	auto& lisa = m_contact.GetPerson("Lisa");
+	Withdraw(toLisa + toBart);
+
+	// AssertIsEnoughMoney(toLisa);
+	auto& lisa = m_contacts.GetPerson("Lisa");
 	TransferTo(lisa, toLisa);
+	std::cout << "Homer dive money to Lisa " << toLisa << std::endl;
 
-	AssertIsEnoughMoney(toBart);
-	auto& bart = m_contact.GetPerson("Bart");
+	// AssertIsEnoughMoney(toBart);
+	auto& bart = m_contacts.GetPerson("Bart");
 	TransferTo(bart, toBart);
+	std::cout << "Homer dive money to Bart " << toLisa << std::endl;
 }
-
-void Homer::AssertIsEnoughMoney(const Money money) const
-{
-	if (GetMoney() < money)
-	{
-		throw std::runtime_error("Is there enough money for the transaction");
-	}
-}
-
-// Стоит ли делать обраоботку ошибок, если мы не сможем проверить работу класса
-// bank?

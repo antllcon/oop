@@ -23,10 +23,8 @@ private:
 	void PayElectricity();
 	void GiveMoneyToKids();
 
-	void AssertIsEnoughMoney(const Money money) const;
-
 private:
-	ContactList& m_contact;
+	ContactList& m_contacts;
 
 	const Money toMarge = 100;
 	const Money toBerns = 200;

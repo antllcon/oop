@@ -73,6 +73,7 @@ bool Bank::TryWithdrawMoney(AccountId id, Money amount)
 	{
 		return false;
 	}
+	return true;
 }
 
 void Bank::SendMoney(AccountId srcId, AccountId dstId, Money amount)
@@ -91,11 +92,11 @@ bool Bank::TrySendMoney(AccountId srcId, AccountId dstId, Money amount)
 	AssertIsNonNegaiveMoney(amount);
 	AssertIsAccountExist(srcId);
 	AssertIsAccountExist(dstId);
-
 	if (GetAccountBalance(srcId) < amount)
 	{
 		return false;
 	}
+	return true;
 }
 
 void Bank::AssertIsAccountExist(AccountId id) const

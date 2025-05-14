@@ -20,6 +20,7 @@ public:
 	void Add(Person& person);
 	Person& GetPerson(const std::string& name) const;
 	PersonWithAccount& GetAccountPerson(const std::string& name) const;
+	const ContactMap& GetAllContacts() const;
 
 private:
 	void AssertIsContactExists(const std::string& name) const;
