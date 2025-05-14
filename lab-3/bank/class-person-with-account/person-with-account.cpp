@@ -2,7 +2,7 @@
 #include <iostream>
 
 PersonWithAccount::PersonWithAccount(
-	const std::string& name, const Money cash, Bank& bank)
+	const std::string& name, Money cash, Bank& bank)
 	: Person(name, cash)
 	, m_bank(bank)
 	, m_id(std::nullopt)
@@ -27,7 +27,7 @@ void PersonWithAccount::CloseAccount()
 		return;
 	}
 	auto cash = m_bank.CloseAccount(m_id.value());
-	ReciveCash(cash);
+	ReceiveCash(cash);
 	m_id.reset();
 }
 
@@ -40,7 +40,7 @@ void PersonWithAccount::Deposit(Money cash)
 	}
 	catch (const BankOperationError& error)
 	{
-		ReciveCash(cash);
+		ReceiveCash(cash);
 	}
 }
 
@@ -49,7 +49,7 @@ void PersonWithAccount::Withdraw(Money cash)
 	m_bank.WithdrawMoney(this->GetAccountId(), cash);
 	try
 	{
-		ReciveCash(cash);
+		ReceiveCash(cash);
 	}
 	catch (const BankOperationError& error)
 	{

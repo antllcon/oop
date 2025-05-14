@@ -10,12 +10,12 @@
 class Lisa : public Person
 {
 public:
-	Lisa(const std::string& name, const Money cash, Bank& bank, ContactList& contact);
+	Lisa(const std::string& name, Money cash, ContactList& contact);
 
 	Lisa(const Lisa&) = delete;
 	Lisa& operator=(const Lisa&) = delete;
 
-	void Step();
+	void Step() override;
 
 private:
 	void PayForCandy();

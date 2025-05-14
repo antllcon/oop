@@ -1,7 +1,7 @@
 #include "berns.h"
 
 Berns::Berns(
-	const std::string& name, const Money cash, Bank& bank, ContactList& contact)
+	const std::string& name, Money cash, Bank& bank, ContactList& contact)
 	: PersonWithAccount(name, cash, bank)
 	, m_contacts(contact)
 {

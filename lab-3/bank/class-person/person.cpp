@@ -2,7 +2,7 @@
 #include <iostream>
 #include <limits>
 
-Person::Person(const std::string& name, const Money cash)
+Person::Person(const std::string& name, Money cash)
 	: m_name(name)
 	, m_cash(0)
 {
@@ -22,26 +22,26 @@ Money Person::GetMoney() const
 	return m_cash;
 }
 
-void Person::SpendCash(const Money cash)
+void Person::SpendCash( Money cash)
 {
 	AssertIsMoneyPositive();
 	AssertIsTransferMoneyValid(cash);
 	m_cash = m_cash - cash;
 }
 
-void Person::ReciveCash(const Money cash)
+void Person::ReceiveCash(Money cash)
 {
 	AssertIsWalletSizeEnough(cash);
 	m_cash = m_cash + cash;
 }
 
-void Person::TransferTo(Person& recipient, const Money cash)
+void Person::TransferTo(Person& recipient, Money cash)
 {
 	SpendCash(cash);
-	recipient.ReciveCash(cash);
+	recipient.ReceiveCash(cash);
 }
 
-void Person::AssertIsEnoughMoney(const Money money) const
+void Person::AssertIsEnoughMoney(Money money) const
 {
 	if (GetMoney() < money)
 	{
@@ -49,7 +49,7 @@ void Person::AssertIsEnoughMoney(const Money money) const
 	}
 }
 
-void Person::AssertIsNameValid(const std::string& name) const
+void Person::AssertIsNameValid(const std::string& name)
 {
 	if (name.empty())
 	{
@@ -65,7 +65,7 @@ void Person::AssertIsMoneyPositive() const
 	}
 }
 
-void Person::AssertIsTransferMoneyValid(const Money cash) const
+void Person::AssertIsTransferMoneyValid(Money cash) const
 {
 	if (cash > m_cash)
 	{
@@ -73,7 +73,7 @@ void Person::AssertIsTransferMoneyValid(const Money cash) const
 	}
 }
 
-void Person::AssertIsWalletSizeEnough(const Money cash) const
+void Person::AssertIsWalletSizeEnough(Money cash) const
 {
 	if (m_cash > std::numeric_limits<Money>::max() - cash)
 	{

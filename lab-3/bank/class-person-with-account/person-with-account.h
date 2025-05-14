@@ -8,7 +8,7 @@
 class PersonWithAccount : public Person
 {
 public:
-	explicit PersonWithAccount(const std::string& name, const Money cash, Bank& bank);
+	explicit PersonWithAccount(const std::string& name, Money cash, Bank& bank);
 
 	PersonWithAccount(const PersonWithAccount&) = delete;
 	PersonWithAccount& operator=(const PersonWithAccount&) = delete;

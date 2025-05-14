@@ -11,12 +11,12 @@ class Marge : public PersonWithAccount
 {
 public:
 	Marge(
-		const std::string& name, const Money cash, Bank& bank, ContactList& contact);
+		const std::string& name, Money cash, Bank& bank, ContactList& contact);
 
 	Marge(const Marge&) = delete;
 	Marge& operator=(const Marge&) = delete;
 
-	void Step();
+	void Step() override;
 
 private:
 	void PayForProducts();

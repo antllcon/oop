@@ -10,12 +10,12 @@
 class Bart : public Person
 {
 public:
-	Bart(const std::string& name, const Money cash, Bank& bank, ContactList& contact);
+	Bart(const std::string& name, Money cash, ContactList& contact);
 
 	Bart(const Bart&) = delete;
 	Bart& operator=(const Bart&) = delete;
 
-	void Step();
+	void Step() override;
 
 private:
 	void PayForEnergyDrink();

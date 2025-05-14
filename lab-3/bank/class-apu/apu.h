@@ -10,12 +10,12 @@
 class Apu : public PersonWithAccount
 {
 public:
-	Apu(const std::string& name, const Money cash, Bank& bank, ContactList& contact);
+	Apu(const std::string& name, Money cash, Bank& bank, ContactList& contact);
 
 	Apu(const Apu&) = delete;
 	Apu& operator=(const Apu&) = delete;
 
-	void Step();
+	void Step() override;
 
 private:
 	void DepositCash();

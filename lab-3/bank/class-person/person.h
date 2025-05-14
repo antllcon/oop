@@ -7,7 +7,7 @@
 class Person
 {
 public:
-	Person(const std::string& name, const Money cash);
+	Person(const std::string& name, Money cash);
 
 	Person(Person&&) = default;
 	Person& operator=(Person&&) = default;
@@ -19,18 +19,18 @@ public:
 	[[nodiscard]] Money GetMoney() const;
 
 	virtual void Step() = 0;
-	void SpendCash(const Money cash);
-	void ReciveCash(const Money cash);
-	void TransferTo(Person& recipient, const Money cash);
+	void SpendCash(Money cash);
+	void ReceiveCash(Money cash);
+	void TransferTo(Person& recipient, Money cash);
 
 protected:
-	void AssertIsEnoughMoney(const Money money) const;
+	void AssertIsEnoughMoney(Money money) const;
 
 private:
-	void AssertIsNameValid(const std::string& name) const;
+	static void AssertIsNameValid(const std::string& name);
 	void AssertIsMoneyPositive() const;
-	void AssertIsTransferMoneyValid(const Money cash) const;
-	void AssertIsWalletSizeEnough(const Money cash) const;
+	void AssertIsTransferMoneyValid(Money cash) const;
+	void AssertIsWalletSizeEnough(Money cash) const;
 
 private:
 	const std::string m_name;

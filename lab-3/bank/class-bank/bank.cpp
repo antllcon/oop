@@ -3,12 +3,22 @@
 Bank::Bank(Money cash)
 	: m_cash(cash)
 {
-	AssertIsNonNegaiveMoney(cash);
+    AssertIsNonNegativeMoney(cash);
 }
 
 Money Bank::GetCash() const
 {
 	return m_cash;
+}
+
+Money Bank::GetDeposits() const
+{
+	Money deposits = 0;
+	for (const auto& [id, deposit] : m_accounts)
+	{
+		deposits += deposit;
+	}
+	return deposits;
 }
 
 Money Bank::GetAccountBalance(AccountId id) const
@@ -24,7 +34,7 @@ AccountId Bank::OpenAccount()
 	return id;
 }
 
-Money Bank::CloseAccount(const AccountId id)
+Money Bank::CloseAccount(AccountId id)
 {
 	auto balance = GetAccountBalance(id);
 	m_accounts.erase(m_accounts.find(id));
@@ -42,10 +52,9 @@ void Bank::DepositMoney(AccountId id, Money amount)
 	m_cash -= amount;
 }
 
-bool Bank::TryDepositMoney(AccountId id, Money amount)
+bool Bank::TryDepositMoney(AccountId id, Money amount) const
 {
-	AssertIsNonNegaiveMoney(amount);
-
+    AssertIsNonNegativeMoney(amount);
 	if (m_cash < amount)
 	{
 		return false;
@@ -66,9 +75,9 @@ void Bank::WithdrawMoney(AccountId id, Money amount)
 	m_cash += amount;
 }
 
-bool Bank::TryWithdrawMoney(AccountId id, Money amount)
+bool Bank::TryWithdrawMoney(AccountId id, Money amount) const
 {
-	AssertIsNonNegaiveMoney(amount);
+    AssertIsNonNegativeMoney(amount);
 	if (GetAccountBalance(id) < amount)
 	{
 		return false;
@@ -89,7 +98,7 @@ void Bank::SendMoney(AccountId srcId, AccountId dstId, Money amount)
 
 bool Bank::TrySendMoney(AccountId srcId, AccountId dstId, Money amount)
 {
-	AssertIsNonNegaiveMoney(amount);
+    AssertIsNonNegativeMoney(amount);
 	AssertIsAccountExist(srcId);
 	AssertIsAccountExist(dstId);
 	if (GetAccountBalance(srcId) < amount)
@@ -103,11 +112,11 @@ void Bank::AssertIsAccountExist(AccountId id) const
 {
 	if (m_accounts.find(id) == m_accounts.end())
 	{
-		return throw BankOperationError("Account does not exist");
+        throw BankOperationError("Account does not exist");
 	}
 }
 
-void Bank::AssertIsNonNegaiveMoney(Money money) const
+void Bank::AssertIsNonNegativeMoney(Money money)
 {
 	if (money < 0)
 	{

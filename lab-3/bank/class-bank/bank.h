@@ -23,6 +23,7 @@ public:
 	Bank& operator=(const Bank&) = delete;
 
 	[[nodiscard]] Money GetCash() const;
+	[[nodiscard]] Money GetDeposits() const;
 	[[nodiscard]] Money GetAccountBalance(AccountId id) const;
 
 	// Открытие счёта в банке.
@@ -32,7 +33,7 @@ public:
 	// Закрытие счёта в банке.
 	// Функция возвращает деньги оставшиеся на счёте.
 	// Эти деньги переходят в наличный оборот.
-	[[nodiscard]] Money CloseAccount(const AccountId id);
+	[[nodiscard]] Money CloseAccount(AccountId id);
 
 	// Пополнение счёта наличными деньгами.
 	// Транзакционная проверка.
@@ -43,7 +44,7 @@ public:
 	// Нельзя поместить на счёт отрицательное количество денег.
 	// Нельзя поместить больше, чем имеется денег в наличном обороте.
 	// Нельзя поместить деньги на отсутствующий счёт.
-	[[nodiscard]] bool TryDepositMoney(AccountId account, Money amount);
+	[[nodiscard]] bool TryDepositMoney(AccountId account, Money amount) const;
 
 	// Снятие денег со счёта.
 	// Транзакционная проверка.
@@ -54,7 +55,7 @@ public:
 	// Нельзя снять со счёта отрицательное количество денег.
 	// Нельзя снять деньги с отсутствующего счёта.
 	// Нельзя снять больше чем есть на счёте.
-	[[nodiscard]] bool TryWithdrawMoney(AccountId id, Money amount);
+	[[nodiscard]] bool TryWithdrawMoney(AccountId id, Money amount) const;
 
 	// Перевод денег с исходного счёта на целевой.
 	// Транзациронная проверка.
@@ -70,7 +71,7 @@ public:
 
 private:
 	void AssertIsAccountExist(AccountId id) const;
-	void AssertIsNonNegaiveMoney(Money amount) const;
+	static void AssertIsNonNegativeMoney(Money amount);
 
 private:
 	Money m_cash = 0;

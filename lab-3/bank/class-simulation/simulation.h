@@ -5,11 +5,12 @@
 #include <vector>
 
 using Actors = std::vector<std::unique_ptr<Person>>;
+using Number = long long;
 
 class Simulation
 {
 public:
-	Simulation(const Money money, const int days);
+	Simulation(Money money, int days);
 
 	Simulation(const Simulation&) = delete;
 	Simulation& operator=(const Simulation&) = delete;
@@ -17,14 +18,16 @@ public:
 	void RunSimulation();
 
 private:
+	void PrintResults() const;
 	void DivisionMoney(Money money);
 	void DebugController();
 	void ShowBalances() const;
 	void OpenAccountsForAll();
-	void AssertIsNumberValid(const int number) const;
+	static void AssertIsNumberValid(Number number);
 
 private:
-	int m_days = 0;
+	Money m_simulationMoney = 0;
+    Number m_days = 0;
 	Bank m_bank;
 	Actors m_actors;
 	ContactList m_contacts;

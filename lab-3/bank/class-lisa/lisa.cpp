@@ -1,7 +1,7 @@
 #include "lisa.h"
 
 Lisa::Lisa(
-	const std::string& name, const Money cash, Bank& bank, ContactList& contact)
+	const std::string& name, Money cash, ContactList& contact)
 	: Person(name, cash)
 	, m_contacts(contact)
 {

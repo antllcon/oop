@@ -11,12 +11,12 @@ class Homer : public PersonWithAccount
 {
 public:
 	Homer(
-		const std::string& name, const Money cash, Bank& bank, ContactList& contact);
+		const std::string& name, Money cash, Bank& bank, ContactList& contact);
 
 	Homer(const Homer&) = delete;
 	Homer& operator=(const Homer&) = delete;
 
-	void Step();
+	void Step() override;
 
 private:
 	void GiveMoneyToMarge();

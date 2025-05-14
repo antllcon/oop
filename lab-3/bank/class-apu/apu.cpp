@@ -1,6 +1,6 @@
 #include "apu.h"
 
-Apu::Apu(const std::string& name, const Money cash, Bank& bank, ContactList& contact)
+Apu::Apu(const std::string& name, Money cash, Bank& bank, ContactList& contact)
 	: PersonWithAccount(name, cash, bank)
 	, m_contacts(contact)
 {
@@ -18,7 +18,7 @@ void Apu::Step()
 
 void Apu::PayElectricity()
 {
-	// AssertIsEnoughMoney(toBerns);
+//	 AssertIsEnoughMoney(toBerns);
 	auto& berns = m_contacts.GetAccountPerson("Berns");
 	SendMoney(berns.GetAccountId(), toBerns);
 	std::cout << "Apu pay for electricity (Burns) " << toBerns << std::endl;

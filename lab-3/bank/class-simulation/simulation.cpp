@@ -8,7 +8,8 @@
 #include <iomanip>
 
 Simulation::Simulation(const Money money, const int days)
-	: m_days(days)
+	: m_simulationMoney(money)
+	, m_days(days)
 	, m_bank(money)
 {
 	AssertIsNumberValid(days);
@@ -41,13 +42,49 @@ void Simulation::RunSimulation()
 			}
 			catch (const std::exception& error)
 			{
-				std::cerr << error.what() << std::endl;
-				std::cout << "Error: " + actor->GetName() + " skip this step"
-						  << std::endl;
+				// std::cerr << error.what() << std::endl;
+				std::cout << actor->GetName() + " skip this step" << std::endl;
 			}
 		}
 
 		DebugController();
+	}
+	PrintResults();
+}
+
+void Simulation::PrintResults() const
+{
+	std::cout << "\nResults:\n" << std::endl;
+
+	Money sum = 0;
+	for (auto& actor : m_actors)
+	{
+		sum += actor->GetMoney();
+	}
+
+	// Сумма наличных денег у персонажей совпадает с суммой наличных денег,
+	// зарегистрированных в банке.
+
+	std::cout << "\n== Cash status == " << std::endl;
+	std::cout << "Cash form actors: " << sum << std::endl;
+	std::cout << "Cash form bank:   " << m_bank.GetCash() << std::endl;
+
+	// Общая сумма всех наличных и безналичных денег на счетах равна сумме, которая
+	// изначально была положена в банк в виде наличных.
+
+	std::cout << "The total amount of all cash and deposits in the accounts is "
+				 "equal to the amount that was originally deposited in the bank in "
+				 "the form of cash.\n"
+			  << std::endl;
+
+	std::cout << "Status = " << std::endl;
+	if (sum + m_bank.GetDeposits() == m_simulationMoney)
+	{
+		std::cout << "[Yes]";
+	}
+	else
+	{
+		std::cout << "[False]";
 	}
 }
 
@@ -83,6 +120,7 @@ void Simulation::DebugController()
 		}
 	}
 }
+
 void Simulation::ShowBalances() const
 {
 	std::cout << "\n[Actor Balances]\n";
@@ -114,11 +152,10 @@ void Simulation::ShowBalances() const
 
 void Simulation::DivisionMoney(Money money)
 {
-	auto cashForPeople = money / m_actors.size();
-
+	Money cashForPeople = money / static_cast<Money>(m_actors.size());
 	for (const auto& actor : m_actors)
 	{
-		actor->ReciveCash(cashForPeople);
+		actor->ReceiveCash(cashForPeople);
 	}
 }
 
@@ -134,7 +171,7 @@ void Simulation::OpenAccountsForAll()
 	}
 }
 
-void Simulation::AssertIsNumberValid(const int number) const
+void Simulation::AssertIsNumberValid(Number number)
 {
 	if (number < 0)
 	{
