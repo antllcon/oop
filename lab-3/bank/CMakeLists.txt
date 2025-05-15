@@ -13,6 +13,9 @@ file(GLOB SOURCES
   class-bart/*.cpp
   class-apu/*.cpp
   class-berns/*.cpp
+  class-nelson/*.cpp
+  class-chester/*.cpp
+  class-waylon/*.cpp
   )
 
 add_executable(start ${SOURCES} main.cpp)

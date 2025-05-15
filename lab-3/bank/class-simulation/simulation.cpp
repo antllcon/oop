@@ -2,9 +2,12 @@
 #include "../class-apu/apu.h"
 #include "../class-bart/bart.h"
 #include "../class-berns/berns.h"
+#include "../class-chester/chester.h"
 #include "../class-homer/homer.h"
 #include "../class-lisa/lisa.h"
 #include "../class-marge/marge.h"
+#include "../class-nelson/nelson.h"
+#include "../class-waylon/waylon.h"
 #include <iomanip>
 
 Simulation::Simulation(const Money money, const int days)
@@ -22,6 +25,10 @@ Simulation::Simulation(const Money money, const int days)
 	m_actors.emplace_back(std::make_unique<Bart>("Bart ", 0, m_contacts));
 	m_actors.emplace_back(std::make_unique<Apu>("Apu", 0, m_bank, m_contacts));
 	m_actors.emplace_back(std::make_unique<Berns>("Berns", 0, m_bank, m_contacts));
+	m_actors.emplace_back(std::make_unique<Nelson>("Nelson", 0, m_contacts));
+	m_actors.emplace_back(
+		std::make_unique<Chester>("Chester", 0, m_bank, m_contacts));
+	m_actors.emplace_back(std::make_unique<Waylon>("Waylon", 0, m_bank, m_contacts));
 
 	DivisionMoney(money);
 	OpenAccountsForAll();

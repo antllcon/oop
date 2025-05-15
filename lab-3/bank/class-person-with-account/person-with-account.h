@@ -13,6 +13,7 @@ public:
 	PersonWithAccount(const PersonWithAccount&) = delete;
 	PersonWithAccount& operator=(const PersonWithAccount&) = delete;
 
+	[[nodiscard]] AccountId GetDeposit() const;
 	[[nodiscard]] AccountId GetAccountId() const;
 
 	void OpenAccount();

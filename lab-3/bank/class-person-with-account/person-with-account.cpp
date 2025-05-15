@@ -1,12 +1,17 @@
 #include "person-with-account.h"
 #include <iostream>
 
-PersonWithAccount::PersonWithAccount(
-	const std::string& name, Money cash, Bank& bank)
+PersonWithAccount::PersonWithAccount(const std::string& name, Money cash, Bank& bank)
 	: Person(name, cash)
 	, m_bank(bank)
 	, m_id(std::nullopt)
 {
+}
+
+AccountId PersonWithAccount::GetDeposit() const
+{
+	AssertIsAccountIdExist();
+	return m_bank.GetAccountBalance(m_id.value());
 }
 
 AccountId PersonWithAccount::GetAccountId() const
