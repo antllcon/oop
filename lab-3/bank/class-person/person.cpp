@@ -1,6 +1,7 @@
 #include "person.h"
 #include <iostream>
 #include <limits>
+#include <random>
 
 Person::Person(const std::string& name, Money cash)
 	: m_name(name)
@@ -22,7 +23,7 @@ Money Person::GetMoney() const
 	return m_cash;
 }
 
-void Person::SpendCash( Money cash)
+void Person::SpendCash(Money cash)
 {
 	AssertIsMoneyPositive();
 	AssertIsTransferMoneyValid(cash);
@@ -39,6 +40,13 @@ void Person::TransferTo(Person& recipient, Money cash)
 {
 	SpendCash(cash);
 	recipient.ReceiveCash(cash);
+}
+
+bool Person::RandomChance(int success, int total)
+{
+	static thread_local std::mt19937 gen{ std::random_device{}() };
+	std::uniform_int_distribution<int> dist(1, total);
+	return dist(gen) <= success;
 }
 
 void Person::AssertIsEnoughMoney(Money money) const

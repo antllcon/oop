@@ -24,6 +24,7 @@ public:
 	void TransferTo(Person& recipient, Money cash);
 
 protected:
+	bool RandomChance(int success, int total);
 	void AssertIsEnoughMoney(Money money) const;
 
 private:
