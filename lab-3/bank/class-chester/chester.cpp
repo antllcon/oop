@@ -11,7 +11,10 @@ Chester::Chester(
 
 void Chester::Step()
 {
-	StealDeposit();
+	if (RandomChance(1, 3))
+	{
+		StealDeposit();
+	}
 	PayForProducts();
 }
 

@@ -10,21 +10,19 @@ Waylon::Waylon(const std::string& name, Money cash, Bank& bank, ContactList& con
 
 void Waylon::Step()
 {
-	Paranoia();
+	if (RandomChance(1, 3))
+	{
+		Paranoia();
+	}
 	PayForProducts();
 }
 
 void Waylon::Paranoia()
 {
-	static std::random_device rd;
-	static std::mt19937 gen(rd());
-	std::uniform_int_distribution<int> dist(1, 3);
-	if (dist(gen) == 1)
-	{
-		CloseAccount();
-		OpenAccount();
-		std::cout << GetName() << " opens a new paranoid account" << std::endl;
-	}
+	CloseAccount();
+	OpenAccount();
+	Deposit(GetMoney());
+	std::cout << GetName() << " opens a new paranoid account" << std::endl;
 }
 
 void Waylon::PayForProducts()

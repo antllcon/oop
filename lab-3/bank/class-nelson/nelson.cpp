@@ -10,7 +10,10 @@ Nelson::Nelson(const std::string& name, Money cash, ContactList& contact)
 
 void Nelson::Step()
 {
-	StealCash();
+	if (RandomChance(1, 3))
+	{
+		StealCash();
+	}
 	PayForCigarettes();
 }
 
@@ -31,9 +34,7 @@ void Nelson::StealCash()
 	std::uniform_int_distribution<Money> dist(1, available);
 	Money stolen = dist(gen);
 
-	bart.SpendCash(stolen);
-	ReceiveCash(stolen);
-
+	bart.TransferTo(*this, stolen);
 	std::cout << GetName() << " steals " << stolen << " from Bart" << std::endl;
 }
 
