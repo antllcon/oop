@@ -1,19 +1,19 @@
 #include "person.h"
 #include <iostream>
 #include <limits>
+#include <optional>
 #include <random>
 
-Person::Person(const std::string& name, Money cash)
+Person::Person(Name name, Money cash)
 	: m_name(name)
 	, m_cash(0)
 {
-	AssertIsNameValid(name);
-	AssertIsWalletSizeEnough(cash);
+	AssertIsCashOverflow(cash);
 	m_cash = cash;
 	AssertIsMoneyPositive();
 }
 
-const std::string& Person::GetName() const
+const Name Person::GetName() const
 {
 	return m_name;
 }
@@ -57,14 +57,6 @@ void Person::AssertIsEnoughMoney(Money money) const
 	}
 }
 
-void Person::AssertIsNameValid(const std::string& name)
-{
-	if (name.empty())
-	{
-		throw std::invalid_argument("The name must be not empty");
-	}
-}
-
 void Person::AssertIsMoneyPositive() const
 {
 	if (m_cash < 0)
@@ -86,5 +78,13 @@ void Person::AssertIsWalletSizeEnough(Money cash) const
 	if (m_cash > std::numeric_limits<Money>::max() - cash)
 	{
 		throw std::runtime_error("There is no place for money");
+	}
+}
+
+void Person::AssertIsCashOverflow(Money cash) const
+{
+	if (cash >= std::numeric_limits<Money>::max())
+	{
+		throw std::runtime_error("Overflow money");
 	}
 }

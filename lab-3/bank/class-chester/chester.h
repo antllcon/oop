@@ -10,7 +10,7 @@
 class Chester : public PersonWithAccount
 {
 public:
-	Chester(const std::string& name, Money cash, Bank& bank, ContactList& contact);
+	Chester(Name name, Money cash, Bank& bank, ContactList& contact);
 
 	Chester(const Chester&) = delete;
 	Chester& operator=(const Chester&) = delete;

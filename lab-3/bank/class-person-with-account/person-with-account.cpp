@@ -1,7 +1,8 @@
 #include "person-with-account.h"
+#include "../class-bank/bank.h"
 #include <iostream>
 
-PersonWithAccount::PersonWithAccount(const std::string& name, Money cash, Bank& bank)
+PersonWithAccount::PersonWithAccount(Name name, Money cash, Bank& bank)
 	: Person(name, cash)
 	, m_bank(bank)
 	, m_id(std::nullopt)
@@ -31,7 +32,7 @@ void PersonWithAccount::CloseAccount()
 	{
 		return;
 	}
-	auto cash = m_bank.CloseAccount(m_id.value());
+	auto cash = m_bank.CloseAccount(this->GetAccountId());
 	ReceiveCash(cash);
 	m_id.reset();
 }

@@ -1,11 +1,12 @@
 #include "waylon.h"
 #include <random>
 
-Waylon::Waylon(const std::string& name, Money cash, Bank& bank, ContactList& contact)
+Waylon::Waylon(Name name, Money cash, Bank& bank, ContactList& contact)
 	: PersonWithAccount(name, cash, bank)
 	, m_contacts(contact)
 {
 	m_contacts.Add(*this);
+	OpenAccount();
 }
 
 void Waylon::Step()
@@ -22,13 +23,13 @@ void Waylon::Paranoia()
 	CloseAccount();
 	OpenAccount();
 	Deposit(GetMoney());
-	std::cout << GetName() << " opens a new paranoid account" << std::endl;
+	std::cout << "Waylon opens a new paranoid account" << std::endl;
 }
 
 void Waylon::PayForProducts()
 {
 	// AssertIsEnoughMoney(toApu);
-	auto& apu = m_contacts.GetAccountPerson("Apu");
+	auto& apu = m_contacts.GetAccountPerson(Name::Apu);
 	SendMoney(apu.GetAccountId(), toApu);
-	std::cout << GetName() << " buys products from Apu " << toApu << std::endl;
+	std::cout << "Waylon buys products from Apu " << toApu << std::endl;
 }

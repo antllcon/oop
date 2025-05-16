@@ -7,15 +7,14 @@
 class Person
 {
 public:
-	Person(const std::string& name, Money cash);
-
+	Person(const Name name, Money cash);
 	Person(Person&&) = default;
 	Person& operator=(Person&&) = default;
 	Person(const Person&) = delete;
 	Person& operator=(const Person&) = delete;
 	virtual ~Person() = default;
 
-	[[nodiscard]] const std::string& GetName() const;
+	[[nodiscard]] const Name GetName() const;
 	[[nodiscard]] Money GetMoney() const;
 
 	virtual void Step() = 0;
@@ -28,13 +27,13 @@ protected:
 	void AssertIsEnoughMoney(Money money) const;
 
 private:
-	static void AssertIsNameValid(const std::string& name);
+	void AssertIsCashOverflow(Money cash) const;
 	void AssertIsMoneyPositive() const;
 	void AssertIsTransferMoneyValid(Money cash) const;
 	void AssertIsWalletSizeEnough(Money cash) const;
 
 private:
-	const std::string m_name;
+	const Name m_name;
 	Money m_cash;
 };
 

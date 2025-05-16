@@ -8,7 +8,7 @@
 #include <string>
 #include <unordered_map>
 
-using ContactMap = std::unordered_map<std::string, std::reference_wrapper<Person>>;
+using ContactMap = std::unordered_map<Name, std::reference_wrapper<Person>>;
 
 class ContactList
 {
@@ -18,13 +18,13 @@ public:
 	ContactList& operator=(const ContactList&) = delete;
 
 	void Add(Person& person);
-	Person& GetPerson(const std::string& name) const;
-	PersonWithAccount& GetAccountPerson(const std::string& name) const;
+	Person& GetPerson(Name name) const;
+	PersonWithAccount& GetAccountPerson(Name name) const;
 	const ContactMap& GetAllContacts() const;
 
 private:
-	void AssertIsContactExists(const std::string& name) const;
-	void AssertIsContactNonExists(const std::string& name) const;
+	void AssertIsContactExists(Name name) const;
+	void AssertIsContactNonExists(Name name) const;
 
 private:
 	ContactMap m_registry;

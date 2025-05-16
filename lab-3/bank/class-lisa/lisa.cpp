@@ -1,6 +1,6 @@
 #include "lisa.h"
 
-Lisa::Lisa(const std::string& name, Money cash, ContactList& contact)
+Lisa::Lisa(Name name, Money cash, ContactList& contact)
 	: Person(name, cash)
 	, m_contacts(contact)
 {
@@ -16,7 +16,7 @@ void Lisa::PayForCandy()
 {
 	// AssertIsEnoughMoney(toApu);
 
-	auto& apu = m_contacts.GetPerson("Apu");
+	auto& apu = m_contacts.GetPerson(Name::Apu);
 	TransferTo(apu, toApu);
 	std::cout << "Lisa buys candy from Apu " << toApu << std::endl;
 }

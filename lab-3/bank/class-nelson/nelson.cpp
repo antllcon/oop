@@ -1,7 +1,7 @@
 #include "nelson.h"
 #include <random>
 
-Nelson::Nelson(const std::string& name, Money cash, ContactList& contact)
+Nelson::Nelson(Name name, Money cash, ContactList& contact)
 	: Person(name, cash)
 	, m_contacts(contact)
 {
@@ -19,13 +19,12 @@ void Nelson::Step()
 
 void Nelson::StealCash()
 {
-	auto& bart = m_contacts.GetPerson("Bart");
+	auto& bart = m_contacts.GetPerson(Name::Bart);
 
 	Money available = bart.GetMoney();
 	if (available <= 0)
 	{
-		std::cout << GetName() << " tried to steal, but Bart has nothing"
-				  << std::endl;
+		std::cout << "Nelson tried to steal, but Bart has nothing" << std::endl;
 		return;
 	}
 
@@ -35,13 +34,13 @@ void Nelson::StealCash()
 	Money stolen = dist(gen);
 
 	bart.TransferTo(*this, stolen);
-	std::cout << GetName() << " steals " << stolen << " from Bart" << std::endl;
+	std::cout << "Nelson steals " << stolen << " from Bart" << std::endl;
 }
 
 void Nelson::PayForCigarettes()
 {
 	// AssertIsEnoughMoney(toApu);
-	auto& apu = m_contacts.GetPerson("Apu");
+	auto& apu = m_contacts.GetPerson(Name::Apu);
 	TransferTo(apu, toApu);
-	std::cout << GetName() << " buys Cigarettes from Apu" << toApu << std::endl;
+	std::cout << "Nelson buys Cigarettes from Apu " << toApu << std::endl;
 }

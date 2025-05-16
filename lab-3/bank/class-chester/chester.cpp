@@ -1,12 +1,12 @@
 #include "chester.h"
 #include <random>
 
-Chester::Chester(
-	const std::string& name, Money cash, Bank& bank, ContactList& contact)
+Chester::Chester(Name name, Money cash, Bank& bank, ContactList& contact)
 	: PersonWithAccount(name, cash, bank)
 	, m_contacts(contact)
 {
 	m_contacts.Add(*this);
+	OpenAccount();
 }
 
 void Chester::Step()
@@ -20,12 +20,12 @@ void Chester::Step()
 
 void Chester::StealDeposit()
 {
-	auto& homer = m_contacts.GetAccountPerson("Homer");
+	auto& homer = m_contacts.GetAccountPerson(Name::Homer);
 	Money available = homer.GetDeposit();
 
 	if (available <= 0)
 	{
-		std::cout << GetName() << " tried to hack Homer, but his account is empty."
+		std::cout << "Chester tried to hack Homer, but his account is empty."
 				  << std::endl;
 		return;
 	}
@@ -36,14 +36,13 @@ void Chester::StealDeposit()
 	Money stolen = dist(gen);
 
 	homer.SendMoney(this->GetAccountId(), stolen);
-	std::cout << GetName() << " hacked Homer's account and steals " << stolen
-			  << std::endl;
+	std::cout << "Chester hacked Homer's account and steals " << stolen << std::endl;
 }
 
 void Chester::PayForProducts()
 {
 	// AssertIsEnoughMoney(toApu);
-	auto& apu = m_contacts.GetAccountPerson("Apu");
+	auto& apu = m_contacts.GetAccountPerson(Name::Apu);
 	SendMoney(apu.GetAccountId(), toApu);
-	std::cout << GetName() << " buys products from Apu " << toApu << std::endl;
+	std::cout << "Chester buys products from Apu " << toApu << std::endl;
 }

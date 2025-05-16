@@ -10,7 +10,7 @@
 class Apu : public PersonWithAccount
 {
 public:
-	Apu(const std::string& name, Money cash, Bank& bank, ContactList& contact);
+	Apu(Name name, Money cash, Bank& bank, ContactList& contact);
 
 	Apu(const Apu&) = delete;
 	Apu& operator=(const Apu&) = delete;

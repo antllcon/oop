@@ -10,7 +10,7 @@
 class Lisa : public Person
 {
 public:
-	Lisa(const std::string& name, Money cash, ContactList& contact);
+	Lisa(Name name, Money cash, ContactList& contact);
 
 	Lisa(const Lisa&) = delete;
 	Lisa& operator=(const Lisa&) = delete;

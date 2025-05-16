@@ -10,8 +10,7 @@
 class Homer : public PersonWithAccount
 {
 public:
-	Homer(
-		const std::string& name, Money cash, Bank& bank, ContactList& contact);
+	Homer(Name name, Money cash, Bank& bank, ContactList& contact);
 
 	Homer(const Homer&) = delete;
 	Homer& operator=(const Homer&) = delete;

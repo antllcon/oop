@@ -10,8 +10,7 @@
 class Berns : public PersonWithAccount
 {
 public:
-	Berns(
-		const std::string& name, Money cash, Bank& bank, ContactList& contact);
+	Berns(Name name, Money cash, Bank& bank, ContactList& contact);
 
 	Berns(const Berns&) = delete;
 	Berns& operator=(const Berns&) = delete;

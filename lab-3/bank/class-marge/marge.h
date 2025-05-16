@@ -10,8 +10,7 @@
 class Marge : public PersonWithAccount
 {
 public:
-	Marge(
-		const std::string& name, Money cash, Bank& bank, ContactList& contact);
+	Marge(Name name, Money cash, Bank& bank, ContactList& contact);
 
 	Marge(const Marge&) = delete;
 	Marge& operator=(const Marge&) = delete;

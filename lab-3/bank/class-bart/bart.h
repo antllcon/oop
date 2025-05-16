@@ -10,7 +10,7 @@
 class Bart : public Person
 {
 public:
-	Bart(const std::string& name, Money cash, ContactList& contact);
+	Bart(Name name, Money cash, ContactList& contact);
 
 	Bart(const Bart&) = delete;
 	Bart& operator=(const Bart&) = delete;

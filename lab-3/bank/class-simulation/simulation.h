@@ -4,14 +4,17 @@
 #include <memory>
 #include <vector>
 
-using Actors = std::vector<std::unique_ptr<Person>>;
+struct SimulationActors
+{
+	std::vector<std::unique_ptr<Person>> persons;
+	std::vector<std::unique_ptr<PersonWithAccount>> personsWithAccount;
+};
 using Number = long long;
 
 class Simulation
 {
 public:
 	Simulation(Money money, int days);
-
 	Simulation(const Simulation&) = delete;
 	Simulation& operator=(const Simulation&) = delete;
 
@@ -19,16 +22,14 @@ public:
 
 private:
 	void PrintResults() const;
-	void DivisionMoney(Money money);
-	void DebugController();
 	void ShowBalances() const;
-	void OpenAccountsForAll();
+	void DivisionMoney(Money money);
 	static void AssertIsNumberValid(Number number);
 
 private:
 	Money m_simulationMoney = 0;
-    Number m_days = 0;
+	Number m_days = 0;
 	Bank m_bank;
-	Actors m_actors;
+	SimulationActors m_actors;
 	ContactList m_contacts;
 };

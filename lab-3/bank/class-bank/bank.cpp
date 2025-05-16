@@ -44,54 +44,69 @@ Money Bank::CloseAccount(AccountId id)
 
 void Bank::DepositMoney(AccountId id, Money amount)
 {
-	if (!TryDepositMoney(id, amount))
-	{
-		throw BankOperationError("Deposit operation failed");
-	}
+	AssertIsNonNegativeMoney(amount);
+	AssertIsAccountExist(id);
+	AssertIsAmountIsMoreCash(amount);
 
 	m_accounts[id] += amount;
 	m_cash -= amount;
 }
 
-bool Bank::TryDepositMoney(AccountId id, Money amount) const
+bool Bank::TryDepositMoney(AccountId id, Money amount)
 {
-	AssertIsNonNegativeMoney(amount);
+	if (amount < 0)
+	{
+		return false;
+	}
 	if (m_cash < amount)
 	{
 		return false;
 	}
-
-	AssertIsAccountExist(id);
+	if (m_accounts.find(id) == m_accounts.end())
+	{
+		return false;
+	}
+	m_accounts[id] += amount;
+	m_cash -= amount;
 	return true;
 }
 
 void Bank::WithdrawMoney(AccountId id, Money amount)
 {
-	if (!TryWithdrawMoney(id, amount))
-	{
-		throw BankOperationError("Withdraw operation failed");
-	}
+	AssertIsNonNegativeMoney(amount);
+	AssertIsAccountExist(id);
+	AssertIsAmountValid(id, amount);
+	AssertIsAmountIsMoreCash(amount);
 
 	m_accounts[id] -= amount;
 	m_cash += amount;
 }
 
-bool Bank::TryWithdrawMoney(AccountId id, Money amount) const
+bool Bank::TryWithdrawMoney(AccountId id, Money amount)
 {
-	AssertIsNonNegativeMoney(amount);
+	if (amount < 0)
+	{
+		return false;
+	}
+	if (m_accounts.find(id) == m_accounts.end())
+	{
+		return false;
+	}
 	if (GetAccountBalance(id) < amount)
 	{
 		return false;
 	}
+	m_accounts[id] -= amount;
+	m_cash += amount;
 	return true;
 }
 
 void Bank::SendMoney(AccountId srcId, AccountId dstId, Money amount)
 {
-	if (!TrySendMoney(srcId, dstId, amount))
-	{
-		throw BankOperationError("Couldn't transfer money");
-	}
+	AssertIsNonNegativeMoney(amount);
+	AssertIsAccountExist(srcId);
+	AssertIsAccountExist(dstId);
+	AssertIsAmountValid(srcId, amount);
 
 	m_accounts[srcId] -= amount;
 	m_accounts[dstId] += amount;
@@ -99,13 +114,28 @@ void Bank::SendMoney(AccountId srcId, AccountId dstId, Money amount)
 
 bool Bank::TrySendMoney(AccountId srcId, AccountId dstId, Money amount)
 {
-	AssertIsNonNegativeMoney(amount);
-	AssertIsAccountExist(srcId);
-	AssertIsAccountExist(dstId);
+	if (amount < 0)
+	{
+		return false;
+	}
 	if (GetAccountBalance(srcId) < amount)
 	{
 		return false;
 	}
+	if (m_accounts.find(srcId) == m_accounts.end())
+	{
+		return false;
+	}
+	if (m_accounts.find(dstId) == m_accounts.end())
+	{
+		return false;
+	}
+	if (m_accounts[srcId] < amount)
+	{
+		return false;
+	}
+	m_accounts[srcId] -= amount;
+	m_accounts[dstId] += amount;
 	return true;
 }
 
@@ -122,5 +152,21 @@ void Bank::AssertIsNonNegativeMoney(Money money)
 	if (money < 0)
 	{
 		throw std::out_of_range("Negative amount is not allowed");
+	}
+}
+
+void Bank::AssertIsAmountValid(AccountId id, Money money) const
+{
+	if (m_accounts.at(id) < money)
+	{
+		throw BankOperationError("Account does not include this amount");
+	}
+}
+
+void Bank::AssertIsAmountIsMoreCash(Money money) const
+{
+	if (m_cash < money)
+	{
+		throw BankOperationError("The amount is more than cash");
 	}
 }

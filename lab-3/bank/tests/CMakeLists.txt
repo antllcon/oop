@@ -1,3 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
 project(MyBank)
-add_executable(start main.cpp class-bank/bank.cpp)
+find_package(GTest REQUIRED)
+add_executable(unit-test main.cpp ../class-person/person.cpp unit-test.cpp)
+target_link_libraries(unit-test GTest::gtest GTest::gtest_main)

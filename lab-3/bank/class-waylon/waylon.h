@@ -10,7 +10,7 @@
 class Waylon : public PersonWithAccount
 {
 public:
-	Waylon(const std::string& name, Money cash, Bank& bank, ContactList& contact);
+	Waylon(Name name, Money cash, Bank& bank, ContactList& contact);
 
 	Waylon(const Waylon&) = delete;
 	Waylon& operator=(const Waylon&) = delete;

@@ -19,19 +19,25 @@ Simulation::Simulation(const Money money, const int days)
 	AssertIsNumberValid(money);
 	m_days = days;
 
-	m_actors.emplace_back(std::make_unique<Homer>("Homer", 0, m_bank, m_contacts));
-	m_actors.emplace_back(std::make_unique<Marge>("Marge", 0, m_bank, m_contacts));
-	m_actors.emplace_back(std::make_unique<Lisa>("Lisa ", 0, m_contacts));
-	m_actors.emplace_back(std::make_unique<Bart>("Bart ", 0, m_contacts));
-	m_actors.emplace_back(std::make_unique<Apu>("Apu", 0, m_bank, m_contacts));
-	m_actors.emplace_back(std::make_unique<Berns>("Berns", 0, m_bank, m_contacts));
-	m_actors.emplace_back(std::make_unique<Nelson>("Nelson", 0, m_contacts));
-	m_actors.emplace_back(
-		std::make_unique<Chester>("Chester", 0, m_bank, m_contacts));
-	m_actors.emplace_back(std::make_unique<Waylon>("Waylon", 0, m_bank, m_contacts));
+	m_actors.personsWithAccount.emplace_back(
+		std::make_unique<Homer>(Name::Homer, 0, m_bank, m_contacts));
+	m_actors.personsWithAccount.emplace_back(
+		std::make_unique<Marge>(Name::Marge, 0, m_bank, m_contacts));
+	m_actors.personsWithAccount.emplace_back(
+		std::make_unique<Apu>(Name::Apu, 0, m_bank, m_contacts));
+	m_actors.personsWithAccount.emplace_back(
+		std::make_unique<Berns>(Name::Berns, 0, m_bank, m_contacts));
+	m_actors.personsWithAccount.emplace_back(
+		std::make_unique<Chester>(Name::Chester, 0, m_bank, m_contacts));
+	m_actors.personsWithAccount.emplace_back(
+		std::make_unique<Waylon>(Name::Waylon, 0, m_bank, m_contacts));
+
+	m_actors.persons.emplace_back(std::make_unique<Lisa>(Name::Lisa, 0, m_contacts));
+	m_actors.persons.emplace_back(std::make_unique<Bart>(Name::Bart, 0, m_contacts));
+	m_actors.persons.emplace_back(
+		std::make_unique<Nelson>(Name::Nelson, 0, m_contacts));
 
 	DivisionMoney(money);
-	OpenAccountsForAll();
 }
 
 void Simulation::RunSimulation()
@@ -41,7 +47,7 @@ void Simulation::RunSimulation()
 		std::cout << std::endl << "Day #" << day << std::endl;
 		std::cout << "=======" << std::endl;
 
-		for (auto& actor : m_actors)
+		for (auto& actor : m_actors.personsWithAccount)
 		{
 			try
 			{
@@ -49,12 +55,21 @@ void Simulation::RunSimulation()
 			}
 			catch (const std::exception& error)
 			{
-				// std::cerr << error.what() << std::endl;
-				std::cout << actor->GetName() + " skip this step" << std::endl;
+				std::cout << "# Actor skip this step: " << error.what() << std::endl;
+			}
+		}
+		for (auto& actor : m_actors.persons)
+		{
+			try
+			{
+				actor->Step();
+			}
+			catch (const std::exception& error)
+			{
+				std::cout << "# Actor skip this step: " << error.what() << std::endl;
 			}
 		}
 
-		// DebugController();
 		ShowBalances();
 	}
 	PrintResults();
@@ -65,7 +80,11 @@ void Simulation::PrintResults() const
 	std::cout << "\nResults:" << std::endl;
 
 	Money sum = 0;
-	for (auto& actor : m_actors)
+	for (auto& actor : m_actors.personsWithAccount)
+	{
+		sum += actor->GetMoney();
+	}
+	for (auto& actor : m_actors.persons)
 	{
 		sum += actor->GetMoney();
 	}
@@ -96,86 +115,37 @@ void Simulation::PrintResults() const
 	}
 }
 
-void Simulation::DebugController()
-{
-	while (true)
-	{
-		std::cout << "\n[DEBUG MENU]\n";
-		std::cout << "1. Skip to the next day\n";
-		std::cout << "2. Show balances of all actors\n";
-		std::cout << "3. Exit debug mode\n";
-		std::cout << "Enter your choice: ";
-
-		int choice;
-		std::cin >> choice;
-
-		switch (choice)
-		{
-		case 1:
-			std::cout << "Skipping to the next day...\n";
-			return;
-		case 2:
-			ShowBalances();
-			break;
-		case 3:
-			// StepThroughActors();
-			break;
-		case 4:
-			std::cout << "Exiting debug mode...\n";
-			return;
-		default:
-			std::cout << "Invalid choice. Please try again.\n";
-		}
-	}
-}
+const std::string& ToString(Name name);
 
 void Simulation::ShowBalances() const
 {
-	std::cout << "\n[Actor Balances]\n";
-	std::cout << "---------------------------------------\n";
-	std::cout << "| Name       | Account Balance | Cash |\n";
-	std::cout << "---------------------------------------\n";
-
-	for (const auto& actor : m_actors)
+	std::cout << "\nActor balances:\n";
+	for (const auto& actor : m_actors.personsWithAccount)
 	{
-		std::cout << "| " << std::setw(8) << std::left << actor->GetName() << " | ";
-
-		if (const auto* personWithAccount
-			= dynamic_cast<const PersonWithAccount*>(actor.get()))
-		{
-			std::cout << std::setw(15) << std::right
-					  << m_bank.GetAccountBalance(personWithAccount->GetAccountId())
-					  << " | ";
-		}
-		else
-		{
-			std::cout << std::setw(15) << std::right << " - " << " | ";
-		}
-
-		std::cout << std::setw(4) << std::right << actor->GetMoney() << " |\n";
+		std::cout << ToString(actor->GetName())
+				  << " | Account: " << m_bank.GetAccountBalance(actor->GetAccountId())
+				  << " | Cash: " << actor->GetMoney() << "\n";
 	}
-
-	std::cout << "---------------------------------------\n";
+	for (const auto& actor : m_actors.persons)
+	{
+		std::cout << ToString(actor->GetName()) << " | Account: -"
+				  << " | Cash: " << actor->GetMoney() << "\n";
+	}
 }
 
 void Simulation::DivisionMoney(Money money)
 {
-	Money cashForPeople = money / static_cast<Money>(m_actors.size());
-	for (const auto& actor : m_actors)
+	Money cashForPeople = money
+		/ static_cast<Money>(
+			m_actors.persons.size() + m_actors.personsWithAccount.size());
+	for (const auto& actor : m_actors.personsWithAccount)
 	{
 		actor->ReceiveCash(cashForPeople);
+		actor->Deposit(actor->GetMoney());
 	}
-}
-
-void Simulation::OpenAccountsForAll()
-{
-	for (auto& actor : m_actors)
+	for (const auto& actor : m_actors.persons)
 	{
-		if (auto* personWithAccount = dynamic_cast<PersonWithAccount*>(actor.get()))
-		{
-			personWithAccount->OpenAccount();
-			personWithAccount->Deposit(personWithAccount->GetMoney());
-		}
+		actor->ReceiveCash(cashForPeople);
 	}
 }
 
@@ -184,5 +154,42 @@ void Simulation::AssertIsNumberValid(Number number)
 	if (number < 0)
 	{
 		throw std::invalid_argument("The number must be a natural number");
+	}
+}
+const std::string& ToString(Name name)
+{
+	static const std::string homer = "Homer";
+	static const std::string marge = "Marge";
+	static const std::string lisa = "Lisa";
+	static const std::string bart = "Bart";
+	static const std::string apu = "Apu";
+	static const std::string berns = "Berns";
+	static const std::string nelson = "Nelson";
+	static const std::string chester = "Chester";
+	static const std::string waylon = "Waylon";
+	static const std::string unknown = "Unknown";
+
+	switch (name)
+	{
+	case Name::Homer:
+		return homer;
+	case Name::Marge:
+		return marge;
+	case Name::Lisa:
+		return lisa;
+	case Name::Bart:
+		return bart;
+	case Name::Apu:
+		return apu;
+	case Name::Berns:
+		return berns;
+	case Name::Nelson:
+		return nelson;
+	case Name::Chester:
+		return chester;
+	case Name::Waylon:
+		return waylon;
+	default:
+		return unknown;
 	}
 }
