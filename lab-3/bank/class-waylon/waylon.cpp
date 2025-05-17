@@ -5,7 +5,7 @@ Waylon::Waylon(Name name, Money cash, Bank& bank, ContactList& contact)
 	: PersonWithAccount(name, cash, bank)
 	, m_contacts(contact)
 {
-	m_contacts.Add(*this);
+	m_contacts.AddPersonWithAccount(*this);
 	OpenAccount();
 }
 

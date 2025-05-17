@@ -1,38 +1,39 @@
 #include "contact-list.h"
 
-void ContactList::Add(Person& person)
+void ContactList::AddPerson(Person& person)
 {
 	const auto& name = person.GetName();
 	AssertIsContactNonExists(name);
-	// m_registry[name] = std::ref(person);
-	m_registry.emplace(name, std::ref(person));
+	m_registry.person.emplace(name, std::ref(person));
+}
+
+void ContactList::AddPersonWithAccount(PersonWithAccount& person)
+{
+	const auto& name = person.GetName();
+	AssertIsContactNonExists(name);
+	m_registry.personWithAccount.emplace(name, std::ref(person));
 }
 
 Person& ContactList::GetPerson(Name name) const
 {
 	AssertIsContactExists(name);
-	return m_registry.at(name).get();
+	return m_registry.person.at(name).get();
 }
 
-const ContactMap& ContactList::GetAllContacts() const
+const ContactMaps& ContactList::GetAllContacts() const
 {
 	return m_registry;
 }
 
 PersonWithAccount& ContactList::GetAccountPerson(Name name) const
 {
-	Person& person = GetPerson(name);
-	auto* personWithAccount = dynamic_cast<PersonWithAccount*>(&person);
-	if (!personWithAccount)
-	{
-		throw std::runtime_error("Contact has no bank account");
-	}
-	return *personWithAccount;
+	AssertIsContactExists(name);
+	return m_registry.personWithAccount.at(name).get();
 }
 
 void ContactList::AssertIsContactExists(Name name) const
 {
-	if (!m_registry.count(name))
+	if (!m_registry.person.count(name) && !m_registry.personWithAccount.count(name))
 	{
 		throw std::runtime_error("Contact not found");
 	}
@@ -40,7 +41,7 @@ void ContactList::AssertIsContactExists(Name name) const
 
 void ContactList::AssertIsContactNonExists(Name name) const
 {
-	if (m_registry.count(name))
+	if (m_registry.person.count(name) || m_registry.personWithAccount.count(name))
 	{
 		throw std::runtime_error("Contact already exists");
 	}

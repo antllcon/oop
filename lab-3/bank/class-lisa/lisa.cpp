@@ -4,7 +4,7 @@ Lisa::Lisa(Name name, Money cash, ContactList& contact)
 	: Person(name, cash)
 	, m_contacts(contact)
 {
-	m_contacts.Add(*this);
+	m_contacts.AddPerson(*this);
 }
 
 void Lisa::Step()

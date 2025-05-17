@@ -135,17 +135,32 @@ void Simulation::ShowBalances() const
 
 void Simulation::DivisionMoney(Money money)
 {
-	Money cashForPeople = money
-		/ static_cast<Money>(
-			m_actors.persons.size() + m_actors.personsWithAccount.size());
+	size_t totalActors = m_actors.persons.size() + m_actors.personsWithAccount.size();
+	if (totalActors == 0)
+		return;
+
+	Money cashForPeople = money / static_cast<Money>(totalActors);
+	Money distributed = 0;
+
 	for (const auto& actor : m_actors.personsWithAccount)
 	{
 		actor->ReceiveCash(cashForPeople);
+		distributed += cashForPeople;
 		actor->Deposit(actor->GetMoney());
 	}
 	for (const auto& actor : m_actors.persons)
 	{
 		actor->ReceiveCash(cashForPeople);
+		distributed += cashForPeople;
+	}
+
+	Money remainder = money - distributed;
+	if (remainder > 0)
+	{
+		if (!m_actors.personsWithAccount.empty())
+			m_actors.personsWithAccount.front()->ReceiveCash(remainder);
+		else if (!m_actors.persons.empty())
+			m_actors.persons.front()->ReceiveCash(remainder);
 	}
 }
 
@@ -153,7 +168,8 @@ void Simulation::AssertIsNumberValid(Number number)
 {
 	if (number < 0)
 	{
-		throw std::invalid_argument("The number must be a natural number");
+		throw std::invalid_argument(
+			"The number must be a natural number or more than 100");
 	}
 }
 const std::string& ToString(Name name)

@@ -1,5 +1,6 @@
 #include "../class-bank/bank.h"
 #include "../class-contact/contact-list.h"
+#include "../class-simulation/simulation.h"
 #include "test-person-with-account.h"
 #include "test-person.h"
 #include <gtest/gtest.h>
@@ -139,21 +140,21 @@ TEST(PersonWithAccountTest, SendMoneyThrowsIfNoAccount)
 TEST(ContactListTest, AddAndGetPerson)
 {
 	ContactList contacts;
-	TestPerson p(Name::Homer, 100);
-	contacts.Add(p);
+	TestPerson p(Name::Lisa, 100);
+	contacts.AddPerson(p);
 
-	Person& ref = contacts.GetPerson(Name::Homer);
+	Person& ref = contacts.GetPerson(Name::Lisa);
 	EXPECT_EQ(&ref, &p);
-	EXPECT_EQ(ref.GetName(), Name::Homer);
+	EXPECT_EQ(ref.GetName(), Name::Lisa);
 }
 
 TEST(ContactListTest, AddAndGetAccountPerson)
 {
-	ContactList contacts;
 	Bank bank(1000);
+	ContactList contacts;
 	TestPersonWithAccount p(Name::Marge, 200, bank);
 	p.OpenAccount();
-	contacts.Add(p);
+	contacts.AddPersonWithAccount(p);
 
 	PersonWithAccount& ref = contacts.GetAccountPerson(Name::Marge);
 	EXPECT_EQ(&ref, &p);
@@ -171,16 +172,25 @@ TEST(ContactListTest, ThrowsIfContactAlreadyExists)
 {
 	ContactList contacts;
 	TestPerson p(Name::Lisa, 50);
-	contacts.Add(p);
-	EXPECT_THROW(contacts.Add(p), std::runtime_error);
+	contacts.AddPerson(p);
+	EXPECT_THROW(contacts.AddPerson(p), std::runtime_error);
+}
+
+TEST(ContactListTest, ThrowsIfContactAlreadyExistsNew)
+{
+	Bank bank(2000);
+	ContactList contacts;
+	TestPersonWithAccount p(Name::Homer, 50, bank);
+	contacts.AddPersonWithAccount(p);
+	EXPECT_THROW(contacts.AddPersonWithAccount(p), std::runtime_error);
 }
 
 TEST(ContactListTest, ThrowsIfNoBankAccount)
 {
 	ContactList contacts;
 	TestPerson p(Name::Nelson, 10);
-	contacts.Add(p);
-	EXPECT_THROW(contacts.GetAccountPerson(Name::Nelson), std::runtime_error);
+	contacts.AddPerson(p);
+	EXPECT_THROW(contacts.GetAccountPerson(Name::Nelson), std::out_of_range);
 }
 
 TEST(ContactListTest, GetAllContacts)
@@ -189,15 +199,15 @@ TEST(ContactListTest, GetAllContacts)
 	TestPerson p1(Name::Apu, 100);
 	Bank bank(1000);
 	TestPersonWithAccount p2(Name::Berns, 200, bank);
-	p2.OpenAccount();
 
-	contacts.Add(p1);
-	contacts.Add(p2);
+	contacts.AddPerson(p1);
+	contacts.AddPersonWithAccount(p2);
 
 	const auto& all = contacts.GetAllContacts();
-	EXPECT_EQ(all.size(), 2);
-	EXPECT_TRUE(all.count(Name::Apu));
-	EXPECT_TRUE(all.count(Name::Berns));
+	EXPECT_EQ(all.person.size(), 1);
+	EXPECT_EQ(all.personWithAccount.size(), 1);
+	EXPECT_TRUE(all.person.count(Name::Apu));
+	EXPECT_TRUE(all.personWithAccount.count(Name::Berns));
 }
 
 TEST(BankTest, InitAndGetCash)
@@ -341,3 +351,10 @@ TEST(BankTest, AccountExistenceChecks)
 	EXPECT_THROW(bank.SendMoney(999, 0, 10), BankOperationError);
 	EXPECT_THROW(bank.SendMoney(0, 999, 10), BankOperationError);
 }
+
+// Тесты для simulation
+// TEST(SimulationTest, BasicSimulation)
+// {
+// 	Simulation simulation(90000, 1000);
+// 	EXPECT_NO_THROW(simulation.RunSimulation());
+// }
