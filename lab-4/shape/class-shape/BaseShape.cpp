@@ -13,8 +13,8 @@ Color BaseShape::GetOutlineColor() const
 
 void BaseShape::AssertIsValidColor(Color color)
 {
-	// if (color > 0xFFFFFF)
-	// {
-	// throw std::invalid_argument("Invalid color value");
-	// }
+	if (color > 0xFFFFFFFF)
+	{
+		throw std::invalid_argument("Invalid color value");
+	}
 }

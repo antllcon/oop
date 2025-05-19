@@ -16,11 +16,12 @@ void Canvas::DrawLine(
 			  sf::Vertex(sf::Vector2f(m_point2.x, m_point2.y), sf::Color(outline)) };
 	m_window.draw(line, 2, sf::Lines);
 }
-
 void Canvas::DrawCircle(const Point& center, double radius, Color outline) const
 {
 	sf::CircleShape circle(radius);
-	circle.setFillColor(sf::Color(outline));
+	circle.setFillColor(sf::Color::Transparent);
+	circle.setOutlineThickness(1);
+	circle.setOutlineColor(sf::Color(outline));
 	circle.setPosition(center.x, center.y);
 	circle.setOrigin(radius, radius);
 	m_window.draw(circle);

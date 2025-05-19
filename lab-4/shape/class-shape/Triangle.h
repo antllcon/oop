@@ -8,7 +8,7 @@ class Triangle : public BaseSolidShape
 {
 public:
 	explicit Triangle(const Point& vertex1, const Point& vertex2,
-		const Point& vertex3, Color fill = 0x000000, Color outline = 0x000000);
+		const Point& vertex3, Color fill, Color outline);
 	~Triangle() = default;
 
 	const Point& GetVertex1() const;
