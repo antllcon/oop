@@ -7,8 +7,8 @@
 class Rectangle : public BaseSolidShape
 {
 public:
-	explicit Rectangle(const Point& topLeft, const Point& bottomRight,
-		Color solidColor, Color outlineColor);
+	explicit Rectangle(
+		const Point& topLeft, const Point& bottomRight, Color fill, Color outline);
 	~Rectangle() = default;
 
 	const Point& GetLeftTop() const;
@@ -18,7 +18,8 @@ public:
 	double GetHeight() const;
 	double GetArea() const override;
 	double GetPerimeter() const override;
-	const std::string& ToString() const override;
+	std::string ToString() const override;
+	void Draw(ICanvas& canvas) const override;
 
 private:
 	Point m_topLeft;

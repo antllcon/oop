@@ -7,8 +7,7 @@
 class Circle : public BaseSolidShape
 {
 public:
-	explicit Circle(
-		const Point& center, double radius, Color solidColor, Color outlineColor);
+	explicit Circle(const Point& center, double radius, Color fill, Color outline);
 	~Circle() = default;
 
 	const Point& GetCenter() const;
@@ -16,7 +15,8 @@ public:
 
 	double GetArea() const override;
 	double GetPerimeter() const override;
-	const std::string& ToString() const override;
+	std::string ToString() const override;
+	void Draw(ICanvas& canvas) const override;
 
 protected:
 	static void AssertIsValidRadius(double radius);

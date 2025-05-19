@@ -1,9 +1,9 @@
 #include "Circle.h"
 #include <math.h>
+#include <sstream>
 
-Circle::Circle(
-	const Point& center, double radius, Color solidColor, Color outlineColor)
-	: BaseSolidShape(solidColor, outlineColor)
+Circle::Circle(const Point& center, double radius, Color fill, Color outline)
+	: BaseSolidShape(fill, outline)
 	, m_center(center)
 	, m_radius(radius)
 {
@@ -30,15 +30,19 @@ double Circle::GetPerimeter() const
 	return 2 * M_PI * m_radius;
 }
 
-const std::string& Circle::ToString() const
+std::string Circle::ToString() const
 {
-	std::string str;
-	str = "== Circle ==";
-	str += "\nArea: " + std::to_string(GetArea());
-	str += "\nPerimeter: " + std::to_string(GetPerimeter());
-	// str += "\nFill color: " + std::to_string(GetFillColor());
-	// str += "\nOutline color: " + std::to_string(GetOutlineColor());
-	return str;
+	std::ostringstream oss;
+	oss << "== Circle ==" << std::endl
+		<< "Area: " << GetArea() << std::endl
+		<< "Perimeter: " << GetPerimeter();
+	return oss.str();
+}
+
+void Circle::Draw(ICanvas& canvas) const
+{
+	canvas.FillCircle(m_center, m_radius, GetFillColor());
+	canvas.DrawCircle(m_center, m_radius, GetOutlineColor());
 }
 
 void Circle::AssertIsValidRadius(double radius)

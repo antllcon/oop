@@ -7,7 +7,7 @@
 class Line : public BaseShape
 {
 public:
-	Line(const Point& a, const Point& b, Color outlineColor);
+	Line(const Point& a, const Point& m_point2, Color outline);
 	~Line() = default;
 
 	const Point& getA() const;
@@ -15,11 +15,12 @@ public:
 
 	double GetArea() const override;
 	double GetPerimeter() const override;
-	const std::string& ToString() const override;
+	std::string ToString() const override;
+	void Draw(ICanvas& canvas) const override;
 
 private:
-	Point a;
-	Point b;
+	Point m_point1;
+	Point m_point2;
 };
 
 #endif // LINE_H

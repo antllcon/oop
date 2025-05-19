@@ -8,8 +8,7 @@ class Triangle : public BaseSolidShape
 {
 public:
 	explicit Triangle(const Point& vertex1, const Point& vertex2,
-		const Point& vertex3, Color solidColor = 0x000000,
-		Color outlineColor = 0x000000);
+		const Point& vertex3, Color fill = 0x000000, Color outline = 0x000000);
 	~Triangle() = default;
 
 	const Point& GetVertex1() const;
@@ -18,7 +17,8 @@ public:
 
 	double GetArea() const override;
 	double GetPerimeter() const override;
-	const std::string& ToString() const override;
+	std::string ToString() const override;
+	void Draw(ICanvas& canvas) const override;
 
 private:
 	Point m_vertex1;

@@ -6,12 +6,12 @@
 class BaseSolidShape : public BaseShape
 {
 public:
-	explicit BaseSolidShape(Color solidColor, Color outlineColor);
+	explicit BaseSolidShape(Color fill, Color outline);
 	virtual ~BaseSolidShape() = default;
 	Color GetFillColor() const;
 
 private:
-	Color m_fillColor = 0x000000;
+	Color m_fillColor;
 };
 
 #endif // BASESOLIDSHAPE_H
