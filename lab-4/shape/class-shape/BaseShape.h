@@ -16,9 +16,6 @@ public:
 	virtual std::string ToString() const = 0;
 	Color GetOutlineColor() const;
 
-protected:
-	static void AssertIsValidColor(Color color);
-
 private:
 	Color m_outlineColor;
 };
