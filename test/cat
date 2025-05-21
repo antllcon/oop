@@ -1,0 +1,23 @@
+rectangle 487 295 685 831 ffb1b1ff ffb1b1ff
+circle 467 831 125 ffb1b1ff ffb1b1ff
+circle 713 831 125 ffb1b1ff ffb1b1ff
+circle 586 295 100 ff7d7dff ff7d7dff
+circle 467 831 125 ff7c00ff ff7c00ff
+circle 713 831 125 ff7c00ff ff7c00ff
+rectangle 487 295 685 831 ff7c00ff ff7c00ff
+circle 586 295 100 ff7c00ff ff7c00ff
+triangle 490 510 425 715 490 715 ff7c00ff ff7c00ff
+triangle 680 510 680 715 745 715 ff7c00ff ff7c00ff
+rectangle 456 865 706 955 ff7c00ff ff7c00ff
+circle 515 935 25 de6c00ff de6c00ff
+circle 515 645 25 de6c00ff de6c00ff
+rectangle 800 800 1000 830 ffad61ff ffa44eff
+circle 713 831 125 ff7c00ff ff7c00ff
+circle 660 935 25 de6c00ff de6c00ff
+circle 660 645 25 de6c00ff de6c00ff
+rectangle 491 645 541 935 de6c00ff de6c00ff
+rectangle 635 645 685 935 de6c00ff de6c00ff
+triangle 330 90 480 150 395 225 de6c00ff ffa44eff
+triangle 840 90 700 155 775 225 de6c00ff ffa44eff
+circle 585 350 225 de6c00ff de6c00ff
+triangle 970 800 1000 830 1050 630 ffca99ff ffbf84ff
