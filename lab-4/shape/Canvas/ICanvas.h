@@ -1,9 +1,9 @@
 #ifndef ICANVAS_H
 #define ICANVAS_H
 
+#include "../Shape/BaseShape.h"
+#include "../Shape/Point.h"
 #include "../Types.h"
-#include "../class-shape/BaseShape.h"
-#include "../class-shape/Point.h"
 #include <vector>
 
 class ICanvas

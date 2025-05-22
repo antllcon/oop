@@ -8,6 +8,8 @@ class Canvas : public ICanvas
 {
 public:
 	explicit Canvas(sf::RenderWindow& window);
+
+	// Убрать поджопник
 	void DrawLine(
 		const Point& m_point1, const Point& m_point2, Color outline) const override;
 	void DrawCircle(const Point& center, double radius, Color outline) const override;

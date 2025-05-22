@@ -1,5 +1,5 @@
-#include "class-canvas/Canvas.h"
-#include "class-shape-controller/ShapeController.h"
+#include "Canvas/Canvas.h"
+#include "ShapeController/ShapeController.h"
 #include <SFML/Graphics.hpp>
 #include <fstream>
 #include <iostream>
@@ -23,39 +23,25 @@ void AssertIsValidOstream(std::ostream& output)
 }
 } // namespace
 
-struct Args
+const std::string& ParseArgs(int argc, const std::string& argv)
 {
-	std::string input = "../../test/";
-	std::string output = "../../test/";
-};
-
-Args ParseArgs(int argc, char* argv[])
-{
-	Args args;
-
-	if (argc != 3)
+	if (argc != 2)
 	{
-		throw std::invalid_argument("Usage: program <input_file> <output_file>");
+		throw std::invalid_argument("Usage: program <input_file>");
 	}
 
-	args.input += argv[1];
-	args.output += argv[2];
-
-	return args;
+	return argv;
 }
 
 int main(int argc, char* argv[])
 {
 	try
 	{
-		auto args = ParseArgs(argc, argv);
-
-		std::ifstream inputFile(args.input);
+		std::string file = ParseArgs(argc, argv[1]);
+		std::ifstream inputFile("../../test/" + file);
 		AssertIsValidIstream(inputFile);
-		std::ofstream outputFile(args.output);
-		AssertIsValidOstream(outputFile);
 
-		ShapeController shapeController(inputFile, outputFile);
+		ShapeController shapeController(inputFile);
 
 		shapeController.ReadShapes();
 		std::cout << "Shapes read successfully" << std::endl;

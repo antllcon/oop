@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.10)
 project(MyShape)
 
 file(GLOB SOURCES
-  class-shape/*.cpp
-  class-canvas/*.cpp
-  class-shape-controller/*.cpp
+  Shape/*.cpp
+  Canvas/*.cpp
+  ShapeController/*.cpp
   )
 
 add_executable(start ${SOURCES} main.cpp)

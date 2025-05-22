@@ -1,11 +1,11 @@
 #ifndef SHAPECONTROLLER_H
 #define SHAPECONTROLLER_H
 
-#include "../class-shape/BaseShape.h"
-#include "../class-shape/Circle.h"
-#include "../class-shape/Line.h"
-#include "../class-shape/Rectangle.h"
-#include "../class-shape/Triangle.h"
+#include "../Shape/BaseShape.h"
+#include "../Shape/Circle.h"
+#include "../Shape/Line.h"
+#include "../Shape/Rectangle.h"
+#include "../Shape/Triangle.h"
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -13,7 +13,7 @@
 class ShapeController
 {
 public:
-	ShapeController(std::istream& input, std::ostream& output);
+	explicit ShapeController(std::istream& input);
 	~ShapeController() = default;
 
 	void ReadShapes();
@@ -30,8 +30,6 @@ private:
 
 private:
 	std::istream& m_input;
-	std::ostream& m_output;
-
 	std::vector<std::unique_ptr<BaseShape>> m_shapes;
 };
 

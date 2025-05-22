@@ -18,10 +18,9 @@ public:
 	std::string ToString() const override;
 	void Draw(ICanvas& canvas) const override;
 
-protected:
+private:
 	static void AssertIsValidRadius(double radius);
 
-private:
 	Point m_center;
 	double m_radius = 0;
 };

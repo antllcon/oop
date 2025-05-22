@@ -78,12 +78,10 @@ void ThrowInvalidShapeType()
 }
 } // namespace
 
-ShapeController::ShapeController(std::istream& input, std::ostream& output)
+ShapeController::ShapeController(std::istream& input)
 	: m_input(input)
-	, m_output(output)
 {
 	AssertIsValidIstream(m_input);
-	AssertIsValidOstream(m_output);
 }
 
 void ShapeController::ReadShapes()
@@ -117,7 +115,7 @@ BaseShape* ShapeController::GetMaxAreaShape() const
 {
 	if (m_shapes.empty())
 	{
-		return nullptr;
+		throw std::runtime_error("There are no figures in the list");
 	}
 
 	auto maxIt = std::max_element(m_shapes.begin(), m_shapes.end(),
@@ -133,7 +131,7 @@ BaseShape* ShapeController::GetMinPerimeterShape() const
 {
 	if (m_shapes.empty())
 	{
-		return nullptr;
+		throw std::runtime_error("There are no figures in the list");
 	}
 
 	auto minIt = std::min_element(m_shapes.begin(), m_shapes.end(),
