@@ -5,8 +5,8 @@
 
 namespace
 {
-constexpr unsigned DAYS_EPOCH = 719'468;
-constexpr unsigned MAX_EPOCH_DAYS = 2'932'896;
+constexpr unsigned DAYS_EPOCH = 719'468; // смещение эпохи с 0000-03-01 до 1970-01-01
+constexpr unsigned MAX_EPOCH_DAYS = 2'932'896; // или 31-12-9999
 constexpr unsigned MAX_YEAR = 9999;
 constexpr unsigned MIN_YEAR = 1970;
 constexpr unsigned MAX_MONTH = 12;
@@ -19,6 +19,7 @@ bool IsLeap(unsigned y) noexcept
 
 unsigned LastDayOfMonthCommonYear(unsigned m) noexcept
 {
+	// Сделать статик
 	constexpr unsigned char a[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	return a[m - 1];
 }
@@ -225,7 +226,7 @@ std::istream& operator>>(std::istream& is, Date& date)
 }
 
 // Вдохновлено Автор: Howard Hinnant
-// Ссылка: https://howardhinnant.github.io/date_algorithms.html#last_day_of_month
+// Ссылка: https://howardhinnant.github.io/date_algorithms.html
 unsigned Date::FromDate(unsigned day, unsigned month, unsigned year) const noexcept
 {
 	year -= month <= 2;
@@ -238,7 +239,7 @@ unsigned Date::FromDate(unsigned day, unsigned month, unsigned year) const noexc
 }
 
 // Вдохновлено Автор: Howard Hinnant
-// Ссылка: https://howardhinnant.github.io/date_algorithms.html#last_day_of_month
+// Ссылка: https://howardhinnant.github.io/date_algorithms.html
 std::tuple<unsigned, unsigned, unsigned> Date::ToDate() const noexcept
 {
 	const unsigned z = m_epochDays + DAYS_EPOCH;

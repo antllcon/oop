@@ -1,0 +1,94 @@
+{
+    "version": "2.0.0",
+    // Список для динамических аргументов
+    "inputs": [
+        {
+            "id": "arg1",
+            "description": "Введите первый аргумент:",
+            "type": "promptString",
+            "default": "../test-files/input"
+        },
+        {
+            "id": "arg2",
+            "description": "Введите второй аргумент:",
+            "type": "promptString",
+            "default": "../test-files/output"
+        }
+    ],
+    // Список задач
+    "tasks": [
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "build" // Папка сборки
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$gcc" // Анализ ошибок - вывод компилятора и подсветка ошибок
+            ],
+            "detail": "Сборка проекта через CMake"
+        },
+        {
+            "label": "Cmake configure",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-S", // Путь к файлу (CMakeLists.txt)
+                ".", // Путь к файлу (CMakeLists.txt)
+                "-B", // Папка сборки (все бинарники и временные файлы)
+                "build", // Папка сборки (все бинарники и временные файлы)
+                "-DCMAKE_BUILD_TYPE=Debug", // Отладочная сборка
+                "-DCMAKE_EXPORT_COMPILE_COMMANDS=1", // Генерация compile_commands.json для анализа кода
+            ],
+            "group": "build",
+            "detail": "Конфигурация CMake"
+        },
+        {
+            "label": "Run",
+            "type": "shell",
+            "command": "${workspaceFolder}/build/start",
+            "group": "test",
+            "dependsOn": "Build",
+            "problemMatcher": [],
+            "detail": "Запуск исполняемого файла после сборки"
+        },
+        {
+            "label": "Run with input",
+            "type": "shell",
+            "command": "${workspaceFolder}/build/start",
+            "args": [
+                "${input:arg1}",
+                "${input:arg2}"
+            ],
+            "group": "test",
+            "dependsOn": "Build",
+            "detail": "Запуск с вводом аргументов"
+        },
+        {
+            "label": "Build and Run",
+            "type": "shell",
+            "command": "echo 'Запуск сборки и выполнения...'",
+            "group": "build",
+            "dependsOn": [
+                "Build",
+                "Run"
+            ],
+            "problemMatcher": [],
+            "detail": "Сборка + запуск",
+            "isBackground": true
+        },
+        {
+            "label": "Build and Run (custom args)",
+            "type": "shell",
+            "command": "echo 'Сборка + запуск с кастомными аргументами'",
+            "group": "build",
+            "dependsOn": [
+                "Build",
+                "Run with input"
+            ],
+            "isBackground": true
+        }
+    ]
+}

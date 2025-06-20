@@ -1,0 +1,24 @@
+Доделать:
+- invert
+- dict 
+- car 
+
+Сделать:
+- fill 
+- parseUrl
+- template
+- ahoCorasic
+- expression
+- car
+- shape (бонус)
+- string
+- httpUrl
+- stringList
+- myArray
+- transport
+- findMaxEx
+
+Не буду делать:
+- calc
+- calc+opt
+- calc+stack

@@ -29,9 +29,9 @@ int main()
 	try
 	{
 		Date date(11, 9, 2001);
-		std::cout << date << std::endl;
 		std::cout << date << "  ===✈ ∏∏" << std::endl;
-		std::cout << std::endl;
+		std::cout << "=========" << std::endl;
+		Date fate1(2345);
 	}
 	catch (const std::exception& error)
 	{
