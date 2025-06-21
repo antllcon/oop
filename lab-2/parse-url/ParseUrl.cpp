@@ -79,8 +79,6 @@ bool parse_url::ParseURL(const std::string& url, UrlData& data)
 	try
 	{
 		std::regex urlRegex(R"(^([a-zA-Z]+):\/\/([a-zA-Z0-9\.\-]+)(?::([0-9]{1,5}))?(?:\/([^?#\s]*))?(?:\?([^#\s]*))?(?:#(\S*))?$)", std::regex::icase);
-		// std::regex urlRegex(R"(^([a-zA-Z]+):\/\/([a-zA-Z0-9\.\-]+)(?::([0-9]{1,5}))?(\/[^\?#\s]*)?(?:\?[^\#\$]*)?(?:\#[^\$]*)?$)", std::regex::icase);
-		// std::regex urlRegex(R"(^([a-zA-Z]+):\/\/([a-zA-Z0-9\.-]+)(?::([0-9]+))?(\/[^?#\s]*)?(?:\?[^#\s]*)?(?:#[^\s]*)?$)", std::regex::icase);
 
 		std::smatch match;
 		if (!std::regex_match(url, match, urlRegex))

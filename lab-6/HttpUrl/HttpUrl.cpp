@@ -3,10 +3,14 @@
 #include <fmt/format.h>
 #include <unordered_map>
 
+// Правки:
+// 1. Вынести в константу localhost
+
 namespace
 {
 constexpr const char* DEFAULT_PORT_FORMAT = "{}://{}/{}";
 constexpr const char* CUSTOM_PORT_FORMAT = "{}://{}:{}/{}";
+constexpr const char* DEFAULT_DOMAIN = "localhost";
 
 std::unordered_map<Protocol::Enum, Port> PROTOCOL_TO_DEFAULT_PORT = {
 	{ Protocol::HTTP, Port(80) },
@@ -50,14 +54,13 @@ HttpUrl::HttpUrl(
 	const std::string& document,
 	Protocol protocol,
 	Port port)
-	: m_domain(domain.empty() ? "localhost" : domain)
+	: m_domain(domain.empty() ? DEFAULT_DOMAIN : domain)
 	, m_document(document)
 	, m_protocol(protocol)
 	, m_port(port)
 {
-	// parse_url::AssertIsPortInRange(port);
+	parse_url::AssertIsPortInRange(static_cast<int>(port));
 }
-// вынести в константу
 
 std::string HttpUrl::GetUrl() const
 {

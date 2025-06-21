@@ -102,3 +102,48 @@ TEST(HttpUrlTest, DomainWithUpperCaseLetters)
 }
 
 // протокол в строке
+
+TEST(HttpUrlTest, ThrowsOnPortBelowRange)
+{
+	EXPECT_THROW(HttpUrl("example.com", "doc", Protocol::HTTP, 0), std::exception);
+}
+
+TEST(HttpUrlTest, AcceptsPortOne)
+{
+	HttpUrl url("example.com", "doc", Protocol::HTTP, 1);
+	EXPECT_EQ(url.GetPort(), 1);
+	EXPECT_EQ(url.GetUrl(), "http://example.com:1/doc");
+}
+
+TEST(HttpUrlTest, AcceptsPort65535)
+{
+	HttpUrl url("example.com", "doc", Protocol::HTTP, 65535);
+	EXPECT_EQ(url.GetPort(), 65535);
+	EXPECT_EQ(url.GetUrl(), "http://example.com:65535/doc");
+}
+
+TEST(HttpUrlTest, ThrowsOnPortZero)
+{
+	EXPECT_THROW(HttpUrl("example.com", "doc", Protocol::HTTP, 0), std::exception);
+}
+
+TEST(HttpUrlTest, ThrowsOnPortAbove65535)
+{
+	unsigned int port = 65536;
+	EXPECT_THROW(HttpUrl("example.com", "doc", Protocol::HTTP, static_cast<unsigned short>(port)), std::exception);
+}
+
+TEST(HttpUrlTest, EmptyDocumentDefaultsToSlash)
+{
+	HttpUrl url("example.com", "", Protocol::HTTP);
+	EXPECT_EQ(url.GetDocument(), "");
+	EXPECT_EQ(url.GetUrl(), "http://example.com/");
+}
+
+TEST(HttpUrlTest, EmptyDomainAndDocument)
+{
+	HttpUrl url("", "", Protocol::HTTP);
+	EXPECT_EQ(url.GetDomain(), "localhost");
+	EXPECT_EQ(url.GetDocument(), "");
+	EXPECT_EQ(url.GetUrl(), "http://localhost/");
+}

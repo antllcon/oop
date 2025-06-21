@@ -36,6 +36,7 @@ public:
 		if (this != &other)
 		{
 			Clear();
+			::operator delete(m_data, m_capacity * sizeof(T));
 
 			m_size = other.m_size;
 			m_capacity = other.m_capacity;
@@ -63,6 +64,7 @@ public:
 		if (this != &other)
 		{
 			Clear();
+			::operator delete(m_data, m_capacity * sizeof(T));
 
 			m_data = other.m_data;
 			m_size = other.m_size;
@@ -78,6 +80,7 @@ public:
 	~Vector()
 	{
 		Clear();
+		::operator delete(m_data, m_capacity * sizeof(T));
 	}
 
 	size_t GetSize() const
@@ -155,7 +158,6 @@ public:
 		}
 
 		m_size = 0;
-		::operator delete(m_data, m_capacity * sizeof(T));
 	}
 
 	T* begin() noexcept
@@ -250,7 +252,7 @@ private:
 
 		for (size_t i = 0; i < m_size; ++i)
 		{
-			newData[i] = std::move(m_data[i]);
+			new (&newData[i]) T(std::move(m_data[i]));
 		}
 
 		for (size_t i = 0; i < m_size; ++i)

@@ -136,7 +136,6 @@ TEST(FindMaxExTest, ExceptionOnInvalidAssignment)
 
 	const auto vecBefore = vec;
 	const auto minValueBefore = minValue;
-
 	EXPECT_THROW(FindMaxEx(vec, minValue, ageCompare), std::runtime_error);
 
 	EXPECT_EQ(vec.size(), originalVec.size());
@@ -150,4 +149,20 @@ TEST(FindMaxExTest, ExceptionOnInvalidAssignment)
 	EXPECT_EQ(minValue.age, minValueBefore.age);
 }
 
-// Добавить тест на выкидыаение исключени
+struct ThrowingComparator
+{
+	bool operator()(int a, int b) const
+	{
+		throw std::runtime_error("Comparison failed!");
+	}
+};
+
+TEST(FindMaxExTest, ThrowsWhenComparatorThrows)
+{
+	std::vector<int> vec = { 1, 2, 3 };
+	int maxValue;
+
+	EXPECT_THROW(
+		FindMaxEx(vec, maxValue, ThrowingComparator{}),
+		std::runtime_error);
+}

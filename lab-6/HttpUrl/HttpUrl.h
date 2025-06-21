@@ -19,14 +19,14 @@ using Port = unsigned short;
 class HttpUrl
 {
 public:
-	HttpUrl(const std::string& url);
+	explicit HttpUrl(const std::string& url);
 
-	HttpUrl(
+	explicit HttpUrl(
 		const std::string& domain,
 		const std::string& document,
 		Protocol protocol = Protocol::HTTP);
 
-	HttpUrl(
+	explicit HttpUrl(
 		const std::string& domain,
 		const std::string& document,
 		Protocol protocol,
