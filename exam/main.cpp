@@ -34,10 +34,10 @@ int main()
 	{
 #if 1
 		auto dictionary = ReadDictionary("dict.txt");
-		std::cout << "В словаре: " << dictionary.size() << " слов" << std::endl;
 #else
-		std::vector<std::string> dictionary
-			= { "telega"s, "lemma"s, "gramm"s, "tema"s, "telo"s, "gamma"s };
+		std::vector<std::string> dictionary = {
+			"telega", "lemma", "gramm", "tema", "telo", "gamma"
+		};
 #endif
 		const auto startTime = steady_clock::now();
 		SubWordFinder finder(dictionary);
@@ -46,7 +46,7 @@ int main()
 				  << duration<double>(precompulationDuration).count() << "с."
 				  << std::endl;
 
-		std::string searchWord = "trus";
+		std::string searchWord = "gamma";
 		const auto startProccess = steady_clock::now();
 		const auto subWords = GetSubWords(searchWord, finder);
 		const auto durationTime = steady_clock::now() - startProccess;

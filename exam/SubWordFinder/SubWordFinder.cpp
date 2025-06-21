@@ -56,5 +56,6 @@ bool SubWordFinder::IsForm(
 			return false;
 		}
 	}
+
 	return true;
 }
