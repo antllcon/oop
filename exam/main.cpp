@@ -49,7 +49,7 @@ int main()
 		std::string searchWord = "gamma";
 		const auto startProccess = steady_clock::now();
 		const auto subWords = GetSubWords(searchWord, finder);
-		const auto durationTime = steady_clock::now() - startProccess;
+		const auto proccessDuration = steady_clock::now() - startProccess;
 
 		for (const auto& subWord : subWords)
 		{
@@ -57,7 +57,7 @@ int main()
 		}
 
 		std::cout << subWords.size() << " слов найдено за "
-				  << duration<double>(durationTime).count() << "с."
+				  << duration<double>(proccessDuration).count() << "с."
 				  << std::endl;
 	}
 	catch (const std::exception& error)
