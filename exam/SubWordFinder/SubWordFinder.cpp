@@ -33,11 +33,11 @@ SubWordFinder::SubWordFinder(const std::vector<std::string>& dictionary)
 SubWords SubWordFinder::GetSubWords(const std::string& word) const
 {
 	SubWords result;
-	LettersMap word_freq_map = MakeLetterMap(word);
+	LettersMap wordLettersMap = MakeLetterMap(word);
 
 	for (const auto& dict_entry : m_precomputedDictionary)
 	{
-		if (IsForm(dict_entry.letterMap, word_freq_map))
+		if (IsForm(dict_entry.letterMap, wordLettersMap))
 		{
 			result.insert(dict_entry.word);
 		}
