@@ -4,7 +4,12 @@
 #include <unordered_set>
 #include <vector>
 
-using LettersMap = std::array<uint8_t, 26>;
+namespace constants
+{
+inline constexpr size_t ENG_LETTERS = 26;
+}
+
+using LettersMap = std::array<uint8_t, constants::ENG_LETTERS>;
 using SubWords = std::unordered_set<std::string>;
 
 struct WordInfo
@@ -20,8 +25,5 @@ public:
 	SubWords GetSubWords(const std::string& word) const;
 
 private:
-	bool IsForm(
-		const LettersMap& subWordMap, const LettersMap& mainWordMap) const;
-
 	std::vector<WordInfo> m_precomputedDictionary;
 };

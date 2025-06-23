@@ -46,10 +46,9 @@ SubWords SubWordFinder::GetSubWords(const std::string& word) const
 	return result;
 }
 
-bool SubWordFinder::IsForm(
-	const LettersMap& subWordMap, const LettersMap& mainWordMap) const
+IsForm(const LettersMap& subWordMap, const LettersMap& mainWordMap)
 {
-	for (int i = 0; i < 26; ++i)
+	for (int i = 0; i < constants::ENG_LETTERS; ++i)
 	{
 		if (subWordMap[i] > mainWordMap[i])
 		{

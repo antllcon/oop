@@ -42,13 +42,14 @@ int main()
 		const auto startTime = steady_clock::now();
 		SubWordFinder finder(dictionary);
 		const auto precompulationDuration = steady_clock::now() - startTime;
+
 		std::cout << "Cоздали стркуктуру за: "
 				  << duration<double>(precompulationDuration).count() << "с."
 				  << std::endl;
 
 		std::string searchWord = "gamma";
 		const auto startProccess = steady_clock::now();
-		const auto subWords = GetSubWords(searchWord, finder);
+		auto subWords = GetSubWords(searchWord, finder);
 		const auto proccessDuration = steady_clock::now() - startProccess;
 
 		for (const auto& subWord : subWords)
